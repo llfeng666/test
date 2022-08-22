@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.PayInDukpayMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.entity.PayInDukpay">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="idempotency_key" jdbcType="VARCHAR" property="idempotencyKey" />
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+        <result column="reference_id" jdbcType="VARCHAR" property="referenceId" />
+    </resultMap>
+
+    <select id="selectByIdKey" resultType="com.example.entity.PayInDukpay">
+        select id as id,
+               idempotency_key as idempotencyKey,
+               merchant_name as merchantNam,
+               vendor_transaction_id as vendorTransactionId,
+               transfer_status as transferStatus
+               from pay_in_dukpay where idempotency_key = #{idempotencyKey}
+    </select>
+
+
+    <select id="selectByEId" resultType="com.example.entity.PayInDukpay">
+        select id as id,
+               idempotency_key as idempotencyKey,
+               merchant_name as merchantNam,
+               vendor_transaction_id as vendorTransactionId,
+               transfer_status as transferStatus
+        from pay_in_dukpay where JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') = #{eId}
+    </select>
+
+</mapper>

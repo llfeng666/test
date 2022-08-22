@@ -1,0 +1,35 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    username: root
+    password: liquido_qa
+    url: jdbc:mysql://127.0.0.1:3308/virgo
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.example.entity
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
+
+bs2:
+  baseUrl: https://api.bs2.com
+  oauth:
+    apiKey: l71ac854e55e4246c3802785bd2a35be89
+    secret: 3e0db6bf6271406186d3e10eab4ace13
+    grantType: client_credentials
+    scope: saldo extrato pagamento transferencia boleto cob.write cob.read pix.write pix.read dict.write dict.read webhook.read webhook.write cobv.write cobv.read comprovante
+liquido:
+  baseUrl: https://api.liquido.com
+
+
+redis:
+  address: redis://127.0.0.1:6379
+  namespace: virgo
