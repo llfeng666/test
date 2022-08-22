@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    username: root
-    password: liquido_qa
-    url: jdbc:mysql://127.0.0.1:3308/virgo
+    username: master
+    password: K2L7uSe2sAe2j5JS
+    url: jdbc:mysql://localhost:13306/virgo
     driver-class-name: com.mysql.jdbc.Driver
 
 mybatis:
