@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.entity.BsFixByEidRequest;
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;
@@ -76,10 +75,8 @@ public class Bs2Service {
         try {
             eidStatusResponse = bs2QueryService.queryBs2Result(eId,accessToken);
         } catch (Exception e) {
-            return BsResponse.builder().eId(eId).errorMsg(e.getMessage()).build();
+            return BsResponse.builder().eId(eId).errorMsg("调bs2 查证失败").build();
         }
-
-
 
         //校验查证返回结果
         if(eidStatusResponse==null||(!"Efetivado".equals(eidStatusResponse.getStatus()))){
