@@ -18,16 +18,21 @@ public class Bs2QueryService {
 
     @Autowired
     Bs2RefreshTokenOauthClient bs2RefreshTokenOauthClient;
+
+
+
+    public String getAccessToken(String eId){
+        //根据eid 去调 查询接口
+        Bs2TokenOauthResponse bs2RefreshTokenOauthResponse  = bs2RefreshTokenOauthClient.authReq(eId);
+        return bs2RefreshTokenOauthResponse.getAccessToken();
+    }
+
     /**
      * 根据eid调 人家接口
      * @param eId
      * @return
      */
-    public Bs2GetEidStatusResponse queryBs2Result(String eId){
-        Bs2TokenOauthResponse bs2RefreshTokenOauthResponse  = bs2RefreshTokenOauthClient.authReq(eId);
-
-        //根据eid 去调 查询接口
-        String accessToken = bs2RefreshTokenOauthResponse.getAccessToken();
+    public Bs2GetEidStatusResponse queryBs2Result(String eId,String accessToken){
         //组装token
         String invalidStr = "Bearer " +accessToken;
         return bs2RefreshTokenOauthClient.getEidStatus(eId,invalidStr);
