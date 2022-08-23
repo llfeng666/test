@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.entity.BsFixByEidRequest;
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;

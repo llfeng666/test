@@ -46,5 +46,9 @@ public class Bs2QueryService {
         return  payInDukpayMapper.selectByEId(eId);
     }
 
+    public PayInDukpay queryPayInDukpayByVendorId(String vendorId) {
+        return  payInDukpayMapper.selectByVendorId(vendorId);
+    }
+
 
 }

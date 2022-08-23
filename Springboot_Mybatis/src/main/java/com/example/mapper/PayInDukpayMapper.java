@@ -14,4 +14,5 @@ public interface PayInDukpayMapper {
 
     PayInDukpay selectByEId(String eId);
 
+    PayInDukpay selectByVendorId(String vendorId);
 }
