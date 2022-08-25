@@ -1,12 +1,16 @@
 package com.example.controller;
 
+import java.util.Objects;
+
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;
+import com.example.enums.TableNames;
 import com.example.service.Bs2QueryService;
 import com.example.service.Bs2Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,33 +42,44 @@ public class Bs2Controller {
      */
     @PostMapping("/fixProblemByEidAndId")
     public BsResponse fixProblemByEidAndId(@RequestBody BsRequest request)
-        throws Exception {
+            throws Exception {
 
         return bs2Service.fixProblemByEidAndId(request);
     }
 
 
-//    @RequestMapping("getStatusById/{idempotencyKey}")
-//    public BsResponse getStatusById(@PathVariable String idempotencyKey) {
-//
-//        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey);
-//        if (payInDukpay == null) {
-//            return BsResponse.builder().errorMsg("根据idempotencyKey 数据库中没查询到记录")
-//                .errorCode("000000").build();
-//        }
-//        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
-//            .build();
-//    }
-//
-//    @RequestMapping("getStatusByEId/{eId}")
-//    public BsResponse getStatusByEid(@PathVariable String eId) {
-//        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayByEId(eId);
-//        if (payInDukpay == null) {
-//            return BsResponse.builder().errorMsg("根据eId 数据库中没查询到记录").errorCode("000000")
-//                .build();
-//        }
-//        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
-//            .build();
-//    }
+    @GetMapping("getStatusById/{idempotencyKey}/{coName}")
+    public BsResponse getStatusById(@PathVariable String idempotencyKey,
+                                    @PathVariable String coName) {
+        String tableName = TableNames.findTableName(coName);
+        if (Objects.isNull(tableName)) {
+            log.error("暂不支持传入对商户名称");
+            return BsResponse.builder().errorMsg("暂不支持传入对商户名称").build();
+        }
+
+        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey, tableName);
+        if (payInDukpay == null) {
+            return BsResponse.builder().errorMsg("根据idempotencyKey 数据库中没查询到记录")
+                    .errorCode("000000").build();
+        }
+        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
+                .build();
+    }
+
+    @GetMapping("getStatusByEId/{eId}/{coName}")
+    public BsResponse getStatusByEid(@PathVariable String eId, @PathVariable String coName) {
+        String tableName = TableNames.findTableName(coName);
+        if (Objects.isNull(tableName)) {
+            log.error("暂不支持传入对商户名称");
+            return BsResponse.builder().errorMsg("暂不支持传入对商户名称").build();
+        }
+        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayByEId(eId, tableName);
+        if (payInDukpay == null) {
+            return BsResponse.builder().errorMsg("根据eId 数据库中没查询到记录").errorCode("000000")
+                    .build();
+        }
+        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
+                .build();
+    }
 
 }
