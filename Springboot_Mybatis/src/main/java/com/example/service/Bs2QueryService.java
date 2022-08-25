@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.entity.CoQueryRequest;
 import com.example.entity.PayInDukpay;
 import com.example.facade.bs2.clients.Bs2RefreshTokenOauthClient;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
@@ -38,16 +39,17 @@ public class Bs2QueryService {
         return bs2RefreshTokenOauthClient.getEidStatus(eId,invalidStr);
     }
 
-    public PayInDukpay queryPayInDukpayById(String idempotencyKey) {
-        return  payInDukpayMapper.selectByIdKey(idempotencyKey);
+    public PayInDukpay queryPayInDukpayById(String idempotencyKey,String tableName) {
+
+        return  payInDukpayMapper.selectByIdKey(CoQueryRequest.builder().idempotencyKey(idempotencyKey).tableName(tableName).build());
     }
 
-    public PayInDukpay queryPayInDukpayByEId(String eId) {
-        return  payInDukpayMapper.selectByEId(eId);
+    public PayInDukpay queryPayInDukpayByEId(String eId,String tableName) {
+        return  payInDukpayMapper.selectByEId(CoQueryRequest.builder().eId(eId).tableName(tableName).build());
     }
 
-    public PayInDukpay queryPayInDukpayByVendorId(String vendorId) {
-        return  payInDukpayMapper.selectByVendorId(vendorId);
+    public PayInDukpay queryPayInDukpayByVendorId(String vendorId,String tableName) {
+        return  payInDukpayMapper.selectByVendorId(CoQueryRequest.builder().tableName(tableName).vendorId(vendorId).build());
     }
 
 

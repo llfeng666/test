@@ -38,33 +38,33 @@ public class Bs2Controller {
      */
     @PostMapping("/fixProblemByEidAndId")
     public BsResponse fixProblemByEidAndId(@RequestBody BsRequest request)
-        throws InterruptedException {
+        throws Exception {
 
         return bs2Service.fixProblemByEidAndId(request);
     }
 
 
-    @RequestMapping("getStatusById/{idempotencyKey}")
-    public BsResponse getStatusById(@PathVariable String idempotencyKey) {
-
-        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey);
-        if (payInDukpay == null) {
-            return BsResponse.builder().errorMsg("根据idempotencyKey 数据库中没查询到记录")
-                .errorCode("000000").build();
-        }
-        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
-            .build();
-    }
-
-    @RequestMapping("getStatusByEId/{eId}")
-    public BsResponse getStatusByEid(@PathVariable String eId) {
-        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayByEId(eId);
-        if (payInDukpay == null) {
-            return BsResponse.builder().errorMsg("根据eId 数据库中没查询到记录").errorCode("000000")
-                .build();
-        }
-        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
-            .build();
-    }
+//    @RequestMapping("getStatusById/{idempotencyKey}")
+//    public BsResponse getStatusById(@PathVariable String idempotencyKey) {
+//
+//        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey);
+//        if (payInDukpay == null) {
+//            return BsResponse.builder().errorMsg("根据idempotencyKey 数据库中没查询到记录")
+//                .errorCode("000000").build();
+//        }
+//        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
+//            .build();
+//    }
+//
+//    @RequestMapping("getStatusByEId/{eId}")
+//    public BsResponse getStatusByEid(@PathVariable String eId) {
+//        PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayByEId(eId);
+//        if (payInDukpay == null) {
+//            return BsResponse.builder().errorMsg("根据eId 数据库中没查询到记录").errorCode("000000")
+//                .build();
+//        }
+//        return BsResponse.builder().status(payInDukpay.getTransferStatus()).errorCode("000000")
+//            .build();
+//    }
 
 }

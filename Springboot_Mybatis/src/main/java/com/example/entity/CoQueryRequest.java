@@ -1,19 +1,19 @@
 package com.example.entity;
 
-
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class BsRequest {
+@Data
+public class CoQueryRequest {
 
     private String idempotencyKey;
 
 
-    private String e2eId;
+    private String eId;
 
-    private String coName;
+    private String  tableName;
 
 
+    private String  vendorId;
 }

@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.example.constant.DBConstants;
+import com.example.entity.CoQueryRequest;
 import com.example.entity.PayInDukpay;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +10,10 @@ import org.springframework.stereotype.Repository;
 @DS(DBConstants.DATASOURCE_VIRGO)
 public interface PayInDukpayMapper {
 
-    PayInDukpay selectByIdKey(String idempotencyKey);
+    PayInDukpay selectByIdKey(CoQueryRequest coQueryRequest);
 
 
-    PayInDukpay selectByEId(String eId);
+    PayInDukpay selectByEId(CoQueryRequest coQueryRequest);
 
-    PayInDukpay selectByVendorId(String vendorId);
+    PayInDukpay selectByVendorId(CoQueryRequest coQueryRequest);
 }

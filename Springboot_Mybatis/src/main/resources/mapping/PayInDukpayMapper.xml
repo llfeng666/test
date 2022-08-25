@@ -9,33 +9,33 @@
         <result column="reference_id" jdbcType="VARCHAR" property="referenceId" />
     </resultMap>
 
-    <select id="selectByIdKey" resultType="com.example.entity.PayInDukpay">
+    <select id="selectByIdKey" parameterType="com.example.entity.CoQueryRequest"  resultType="com.example.entity.PayInDukpay">
         select id as id,
                idempotency_key as idempotencyKey,
                merchant_name as merchantNam,
                vendor_transaction_id as vendorTransactionId,
                transfer_status as transferStatus
-               from pay_in_dukpay where idempotency_key = #{idempotencyKey}
+               from ${tableName} where idempotency_key = #{idempotencyKey}
     </select>
 
 
-    <select id="selectByEId" resultType="com.example.entity.PayInDukpay">
+    <select id="selectByEId" parameterType="com.example.entity.CoQueryRequest" resultType="com.example.entity.PayInDukpay">
         select id as id,
                idempotency_key as idempotencyKey,
                merchant_name as merchantNam,
                vendor_transaction_id as vendorTransactionId,
                transfer_status as transferStatus
-        from pay_in_dukpay where JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') = #{eId}
+        from ${tableName} where JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') = #{eId}
     </select>
 
 
-    <select id="selectByVendorId" resultType="com.example.entity.PayInDukpay">
+    <select id="selectByVendorId" parameterType="com.example.entity.CoQueryRequest"  resultType="com.example.entity.PayInDukpay">
         select id as id,
                idempotency_key as idempotencyKey,
                merchant_name as merchantNam,
                vendor_transaction_id as vendorTransactionId,
                transfer_status as transferStatus
-        from pay_in_dukpay where vendor_transaction_id={vendorId}
+        from ${tableName} where vendor_transaction_id=#{vendorId}
     </select>
 
 </mapper>

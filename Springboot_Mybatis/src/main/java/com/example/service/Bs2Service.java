@@ -5,11 +5,18 @@ import java.util.Objects;
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;
+import com.example.enums.TableNames;
+import com.example.facade.JsonUtils;
 import com.example.facade.bs2.clients.Bs2RefreshTokenOauthClient;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.example.facade.bs2.model.Bs2Pix;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +37,22 @@ public class Bs2Service {
      * @param request
      * @return
      */
-    public BsResponse fixProblemByEidAndId(BsRequest request) throws InterruptedException {
+    public BsResponse fixProblemByEidAndId(BsRequest request)
+            throws Exception {
         //1.参数校验
         if (request == null
             || StringUtils.isEmpty(request.getE2eId())) {
             log.error("eid参数为空");
             return BsResponse.builder().errorMsg("eid参数为空").build();
         }
+
+
+        if (Objects.isNull(TableNames.findTableName(request.getCoName()))) {
+            log.error("暂不支持传入对商户名称");
+            return BsResponse.builder().eId(request.getE2eId()).errorMsg("暂不支持传入对商户名称").build();
+        }
+         String tableName = TableNames.findTableName(request.getCoName());
+
 
         String e2eId = request.getE2eId();
         String idempotencyKey = request.getIdempotencyKey();
@@ -56,6 +72,7 @@ public class Bs2Service {
         } catch (Exception e) {
             return BsResponse.builder().eId(e2eId).errorMsg("调bs2 查证失败").build();
         }
+        log.info("Bs2GetEidStatusResponse:{}", (new ObjectMapper()).writeValueAsString(eidStatusResponse));
 
         //校验查证返回结果
         if (Objects.isNull(eidStatusResponse)
@@ -67,20 +84,24 @@ public class Bs2Service {
 
         //获取vendor_transaction_id
         String vendorTransactionId = eidStatusResponse.getTxId();
-        return handle(vendorTransactionId, e2eId, idempotencyKey, idEmptyFlag, eidStatusResponse);
+        return handle(vendorTransactionId, e2eId, idempotencyKey, idEmptyFlag, eidStatusResponse,tableName);
 
     }
 
 
     private BsResponse handle(String vendorTransactionId, String e2eId, String idempotencyKey,
-                              boolean idEmptyFlag, Bs2GetEidStatusResponse eidStatusResponse)
+                              boolean idEmptyFlag, Bs2GetEidStatusResponse eidStatusResponse,String tableName)
         throws InterruptedException {
 
         PayInDukpay payInDukpay;
-        if (Objects.isNull(vendorTransactionId)) {
-            payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey);
-        } else {
-            payInDukpay = bs2QueryService.queryPayInDukpayByVendorId(vendorTransactionId);
+        if (!Objects.isNull(vendorTransactionId)) {
+            payInDukpay = bs2QueryService.queryPayInDukpayByVendorId(vendorTransactionId,tableName);
+        }else{
+            if (idEmptyFlag) {
+                return BsResponse.builder().eId(e2eId).errorCode("000000")
+                        .errorMsg("vendorId 为空,幂等键为空 无法查询到收款记录").build();
+            }
+            payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey,tableName);
         }
 
         if (Objects.isNull(payInDukpay)) {
@@ -123,7 +144,7 @@ public class Bs2Service {
         boolean successFlag = bs2RefreshTokenOauthClient.webhookPix(bs2Pix);
         Thread.sleep(2000);
         final PayInDukpay payInDukpayInfo =
-            bs2QueryService.queryPayInDukpayById(payInDukpay.getIdempotencyKey());
+            bs2QueryService.queryPayInDukpayById(payInDukpay.getIdempotencyKey(), tableName);
         final boolean isSettled = "SETTLED".equals(payInDukpayInfo.getTransferStatus());
 
         String errorMsg = isSettled ? "已经更新为settled" :
