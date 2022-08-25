@@ -9,7 +9,7 @@ public class BsRequest {
     private String idempotencyKey;
 
     @NonNull
-    private String eid;
+    private String e2eId;
 
     public String getIdempotencyKey() {
         return idempotencyKey;
@@ -19,11 +19,11 @@ public class BsRequest {
         this.idempotencyKey = idempotencyKey;
     }
 
-    public String getEid() {
-        return eid;
+    public String getE2eId() {
+        return e2eId;
     }
 
-    public void setEid(String eid) {
-        this.eid = eid;
+    public void setE2eId(String e2eId) {
+        this.e2eId = e2eId;
     }
 }
