@@ -2,6 +2,8 @@ package com.example.controller;
 
 
 import com.example.entity.WorkItemResponse;
+import com.example.entity.vo.BasicResultVO;
+import com.example.enums.RespStatusEnum;
 import com.example.service.WorkItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +32,12 @@ public class CallBackInfoController {
      * @throws Exception
      */
     @GetMapping("queryCallBackInfo/{idempotencyKey}/{coName}")
-    public WorkItemResponse queryCallBackInfo(@PathVariable String idempotencyKey,
-                                              @PathVariable String coName) {
+    public BasicResultVO queryCallBackInfo(@PathVariable String idempotencyKey,
+                                           @PathVariable String coName) {
+        final WorkItemResponse workItemResponse =
+                workItemService.queryCallBackInfo(idempotencyKey, coName);
+        return new BasicResultVO<>(RespStatusEnum.SUCCESS, workItemResponse);
 
-        return workItemService.queryCallBackInfo(idempotencyKey,coName);
     }
 
 }
