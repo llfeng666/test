@@ -1,11 +1,11 @@
 package com.example.enums;
 
-public enum TableNames {
+public enum PayInTableNames {
     DUKPAY("dukpay","pay_in_dukpay"),
     CHENG_FAN("cheng_fan","pay_in_cheng_fan"),
     WAN_BO("wan_bo","pay_in_wan_bo");
 
-    TableNames(final String coName, final String tableName) {
+    PayInTableNames(final String coName, final String tableName) {
         this.coName = coName;
         this.tableName = tableName;
     }
@@ -31,7 +31,7 @@ public enum TableNames {
     private String tableName;
 
     public static String findTableName(String coName){
-        for (TableNames value : TableNames.values()) {
+        for (PayInTableNames value : PayInTableNames.values()) {
             if (coName.equals(value.coName)) {
                 return value.tableName;
             }

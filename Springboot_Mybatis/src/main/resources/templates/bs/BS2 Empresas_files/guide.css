@@ -1,0 +1,30 @@
+:root{
+    /* LOGOTIPOS */
+	
+	/*image_logo_empresas_blue*/
+	--logo_login_imagem: url("/assets/themes/bs2/images/bs2_banco_logo_azul_empresas.svg"); 
+	/* --logo_login_largura: */
+	/* --logo_login_altura: */
+	--image_logo_empresas_blue: var(--logo_login_imagem);
+	/*image_logo_white*/
+	--barra_menu_superior_cor: var(--color_primary);
+	--logo_barra_superior_hub_imagem: url("/assets/themes/bs2/images/bs2_banco_logo_branco_empresas.svg");
+	/* --logo_barra_superior_hub_largura: */
+	/* --logo_barra_superior_hub_altura: */
+	--image_logo_white:var(--logo_barra_superior_hub_imagem);	
+	
+	/*image_logo_empresas_white*/
+	--logo_menu_vertical_imagem: url("/assets/themes/bs2/images/bs2_banco_logo_branco_empresas.svg");
+	/* --logo_menu_vertical_largura: */
+	/* --logo_menu_vertical_altura: */
+	--image_logo_empresas_white:var(--logo_menu_vertical_imagem);
+
+	--logo_menu_vertical_pix_imagem: var(--logo_menu_vertical_imagem);
+	--logo_menu_vertical_pix_largura: calc(100% - 40px);
+	/* --logo_menu_vertical_pix_altura: */
+
+	--cartao_internacional_cor_fundo: #002458;
+	--cartao_internacional_logo: var(--logo_menu_vertical_imagem);
+	/* --cartao_internacional_largura: ; */
+	/* --cartao_internacional_altura: ; */
+}

@@ -5,11 +5,10 @@ import java.util.Objects;
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;
-import com.example.enums.TableNames;
+import com.example.enums.PayInTableNames;
 import com.example.facade.bs2.clients.Bs2RefreshTokenOauthClient;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.example.facade.bs2.model.Bs2Pix;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,12 +41,12 @@ public class Bs2Service {
         }
 
 
-        if (Objects.isNull(TableNames.findTableName(request.getCoName()))) {
+        if (Objects.isNull(PayInTableNames.findTableName(request.getCoName()))) {
             log.error("暂不支持传入对商户名称");
             return BsResponse.builder().eId(request.getE2eId()).errorMsg("暂不支持传入对商户名称")
                     .build();
         }
-        String tableName = TableNames.findTableName(request.getCoName());
+        String tableName = PayInTableNames.findTableName(request.getCoName());
 
 
         String e2eId = request.getE2eId();

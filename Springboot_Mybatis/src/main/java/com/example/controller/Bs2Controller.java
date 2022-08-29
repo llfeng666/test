@@ -5,8 +5,7 @@ import java.util.Objects;
 import com.example.entity.BsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.PayInDukpay;
-import com.example.entity.vo.BasicResultVO;
-import com.example.enums.TableNames;
+import com.example.enums.PayInTableNames;
 import com.example.service.Bs2QueryService;
 import com.example.service.Bs2Service;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,7 @@ public class Bs2Controller {
     @GetMapping("getStatusById/{idempotencyKey}/{coName}")
     public BsResponse getStatusById(@PathVariable String idempotencyKey,
                                     @PathVariable String coName) {
-        String tableName = TableNames.findTableName(coName);
+        String tableName = PayInTableNames.findTableName(coName);
         if (Objects.isNull(tableName)) {
             log.error("暂不支持传入对商户名称");
             return BsResponse.builder().errorMsg("暂不支持传入对商户名称").build();
@@ -69,7 +68,7 @@ public class Bs2Controller {
 
     @GetMapping("getStatusByEId/{eId}/{coName}")
     public BsResponse getStatusByEid(@PathVariable String eId, @PathVariable String coName) {
-        String tableName = TableNames.findTableName(coName);
+        String tableName = PayInTableNames.findTableName(coName);
         if (Objects.isNull(tableName)) {
             log.error("暂不支持传入对商户名称");
             return BsResponse.builder().errorMsg("暂不支持传入对商户名称").build();

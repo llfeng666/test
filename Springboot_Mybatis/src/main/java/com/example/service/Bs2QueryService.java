@@ -2,10 +2,12 @@ package com.example.service;
 
 import com.example.entity.CoQueryRequest;
 import com.example.entity.PayInDukpay;
+import com.example.entity.Proof;
 import com.example.facade.bs2.clients.Bs2RefreshTokenOauthClient;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.example.facade.bs2.model.Bs2TokenOauthResponse;
 import com.example.mapper.PayInDukpayMapper;
+import com.example.mapper.PayOutDukpayMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,19 @@ public class Bs2QueryService {
     private  PayInDukpayMapper payInDukpayMapper;
 
     @Autowired
+    private PayOutDukpayMapper payOutDukpayMapper;
+
+    @Autowired
     Bs2RefreshTokenOauthClient bs2RefreshTokenOauthClient;
+
+
+    public Proof getPloofInfo(String idempotencyKey,String eId,String tableName){
+        return  payOutDukpayMapper.queryPayOutInfo(CoQueryRequest.builder()
+                        .idempotencyKey(idempotencyKey)
+                        .eId(eId)
+                        .tableName(tableName)
+                .build());
+    }
 
 
 

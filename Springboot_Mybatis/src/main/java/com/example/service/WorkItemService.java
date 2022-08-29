@@ -5,7 +5,7 @@ import java.util.Date;
 import com.example.entity.PayInDukpay;
 import com.example.entity.WorkItem;
 import com.example.entity.WorkItemResponse;
-import com.example.enums.TableNames;
+import com.example.enums.PayInTableNames;
 import com.example.mapper.WorkItemMapper;
 import com.example.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class WorkItemService {
     private Bs2QueryService bs2QueryService;
 
     public WorkItemResponse queryCallBackInfo(String idempotencyKey, String coName){
-        final String tableName = TableNames.findTableName(coName);
+        final String tableName = PayInTableNames.findTableName(coName);
         PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey,tableName);
         WorkItem workItem = workItemMapper.queryByGroupId(payInDukpay.getInternalTransactionId());
 
