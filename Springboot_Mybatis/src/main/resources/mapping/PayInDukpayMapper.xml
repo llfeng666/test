@@ -11,11 +11,12 @@
 
     <select id="selectByIdKey" parameterType="com.example.entity.CoQueryRequest"
             resultType="com.example.entity.PayInDukpay">
-        select id                    as id,
-               idempotency_key       as idempotencyKey,
-               merchant_name         as merchantNam,
-               vendor_transaction_id as vendorTransactionId,
-               transfer_status       as transferStatus
+        select id                      as id,
+               idempotency_key         as idempotencyKey,
+               merchant_name           as merchantNam,
+               vendor_transaction_id   as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
+               transfer_status         as transferStatus
         from ${tableName}
         where idempotency_key = #{idempotencyKey}
     </select>
@@ -27,6 +28,7 @@
                idempotency_key       as idempotencyKey,
                merchant_name         as merchantNam,
                vendor_transaction_id as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
                transfer_status       as transferStatus
         from ${tableName}
         where JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') = #{eId}
@@ -39,6 +41,7 @@
                idempotency_key       as idempotencyKey,
                merchant_name         as merchantNam,
                vendor_transaction_id as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
                transfer_status       as transferStatus
         from ${tableName}
         where vendor_transaction_id = #{vendorId}

@@ -9,6 +9,7 @@ import com.example.enums.TableNames;
 import com.example.facade.bs2.clients.Bs2RefreshTokenOauthClient;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.example.facade.bs2.model.Bs2Pix;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +58,7 @@ public class Bs2Service {
         try {
             accessToken = bs2QueryService.getAccessToken(e2eId);
         } catch (Exception e) {
+            log.error("调bs2 获取token 异常");
             return BsResponse.builder().eId(e2eId).errorMsg("调bs2 获取token异常").build();
         }
 
@@ -65,6 +67,7 @@ public class Bs2Service {
         try {
             eidStatusResponse = bs2QueryService.queryBs2Result(e2eId, accessToken);
         } catch (Exception e) {
+            log.error("调bs2 查证异常");
             return BsResponse.builder().eId(e2eId).errorMsg("调bs2 查证失败").build();
         }
         log.info("Bs2GetEidStatusResponse:{}",
@@ -73,6 +76,7 @@ public class Bs2Service {
         //校验查证返回结果
         if (Objects.isNull(eidStatusResponse)
                 || (!"Efetivado".equals(eidStatusResponse.getStatus()))) {
+            log.error("bs2查证返回为空或者订单状态不是支付完成");
             return BsResponse.builder().eId(e2eId)
                     .errorMsg("bs2查证返回为空或者订单状态不是支付完成")
                     .build();
@@ -89,7 +93,7 @@ public class Bs2Service {
     private BsResponse handle(String vendorTransactionId, String e2eId, String idempotencyKey,
                               boolean idEmptyFlag, Bs2GetEidStatusResponse eidStatusResponse,
                               String tableName)
-            throws InterruptedException {
+            throws  Exception {
 
         PayInDukpay payInDukpay;
         if (!Objects.isNull(vendorTransactionId)) {
@@ -97,6 +101,7 @@ public class Bs2Service {
                     bs2QueryService.queryPayInDukpayByVendorId(vendorTransactionId, tableName);
         } else {
             if (idEmptyFlag) {
+                log.error("vendorId 为空,幂等键为空 无法查询到收款记录");
                 return BsResponse.builder().eId(e2eId).errorCode("000000")
                         .errorMsg("vendorId 为空,幂等键为空 无法查询到收款记录").build();
             }
@@ -104,6 +109,7 @@ public class Bs2Service {
         }
 
         if (Objects.isNull(payInDukpay)) {
+            log.error("根据幂等键未查询到相关记录");
             return BsResponse.builder().eId(e2eId).errorCode("000000")
                     .errorMsg("根据幂等键未查询到相关记录").build();
         }
@@ -111,22 +117,25 @@ public class Bs2Service {
 
         //如果传入的幂等键不为空 校验传入的幂等键和查询出来的幂等键是否一致
         if (!idEmptyFlag && (!idempotencyKey.equals(payInDukpay.getIdempotencyKey()))) {
+            log.error("数据库中的幂等键和传入的幂等键不一致");
             return BsResponse.builder().eId(e2eId).errorCode("000000")
                     .errorMsg("数据库中的幂等键和传入的幂等键不一致").build();
         }
 
         //校验查证返回的txiId 和 TransactionId是否一致
         String txId = eidStatusResponse.getTxId();
-        if (txId.equals(payInDukpay.getVendorTransactionId())) {
+        if (!txId.equals(payInDukpay.getVendorTransactionId())) {
             return BsResponse.builder().eId(e2eId).errorMsg("查证返回txId和数据库中不一致").build();
         }
 
         //校验完再判断状态为已settled 直接返回
         if ("SETTLED".equals(payInDukpay.getTransferStatus())) {
+            log.error("已经是为settled");
             return BsResponse.builder().eId(e2eId).errorCode("000000").errorMsg("已经是为settled")
                     .build();
         }
 
+        log.info("开始回调自己");
         //组装回调报文
         String data = eidStatusResponse.getData();
         double valor = eidStatusResponse.getValor();
@@ -139,6 +148,7 @@ public class Bs2Service {
                         .cpf("")
                         .name("liquido")
                         .build()).build();
+        log.info("开始回调自己请求入参;{}",new ObjectMapper().writeValueAsString(bs2Pix));
         //回调
         boolean successFlag = bs2RefreshTokenOauthClient.webhookPix(bs2Pix);
         Thread.sleep(2000);
@@ -148,7 +158,7 @@ public class Bs2Service {
 
         String errorMsg = isSettled ? "已经更新为settled" :
                 (!successFlag ? "回调异常" : "已回调成功，状态暂时为更新稍后再查");
-
+        log.info(errorMsg);
         return BsResponse.builder().eId(e2eId).errorCode("000000").errorMsg(errorMsg).build();
 
     }

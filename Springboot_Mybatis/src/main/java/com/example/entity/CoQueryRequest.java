@@ -16,4 +16,7 @@ public class CoQueryRequest {
 
 
     private String  vendorId;
+
+
+
 }
