@@ -17,6 +17,8 @@
                update_time         as updateTime
         from work_item
         where work_group_id = #{groupId}
+        and status='SUCCEEDED'
+        order by update_time desc
     </select>
 
 
