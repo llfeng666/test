@@ -82,4 +82,21 @@ public class Bs2Controller {
                 .build();
     }
 
+
+    /**
+     * 退款
+     * 用户提供幂等键 或者eid
+     */
+    @PostMapping("/refund")
+    public BsResponse refund(@RequestBody BsRequest request)
+            throws Exception {
+
+        return bs2Service.refund(request);
+    }
+
+    @GetMapping("queryRefund/{e2eId}")
+    public BsResponse queryRefund(@PathVariable String e2eId){
+        return bs2Service.queryRefund(e2eId);
+    }
+
 }

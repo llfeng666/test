@@ -14,5 +14,5 @@ public class WorkItemResponse {
 
     private String workGroupId;
 
-
+    private String errorMsg;
 }

@@ -1,17 +1,17 @@
 package com.example.service;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+
+import cn.hutool.core.collection.CollUtil;
 import com.example.entity.PayInDukpay;
 import com.example.entity.WorkItem;
 import com.example.entity.WorkItemResponse;
 import com.example.enums.PayInTableNames;
 import com.example.mapper.WorkItemMapper;
 import com.example.utils.DateUtils;
-import jodd.util.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +29,19 @@ public class WorkItemService {
     public WorkItemResponse queryCallBackInfo(String idempotencyKey, String coName){
         final String tableName = PayInTableNames.findTableName(coName);
         PayInDukpay payInDukpay = bs2QueryService.queryPayInDukpayById(idempotencyKey,tableName);
+        if(Objects.isNull(payInDukpay)){
+            log.error("幂等键 {} 在payin 查询不到记录",idempotencyKey);
+            return WorkItemResponse.builder().errorMsg("幂等键在payin 查询不到记录").build();
+        }
+        if(!"SETTLED".equals(payInDukpay.getTransferStatus())){
+            log.error("该订单状态:{}",payInDukpay.getTransferStatus());
+            return WorkItemResponse.builder().errorMsg("该订单状态:"+payInDukpay.getTransferStatus()).build();
+        }
+
         List<WorkItem> workItems = workItemMapper.queryByGroupId(payInDukpay.getInternalTransactionId());
-        if(Objects.isNull(workItems)){
-            return null;
+        if(CollUtil.isEmpty(workItems)){
+            log.error("无回调记录:");
+            return WorkItemResponse.builder().errorMsg("无回调记录").build();
         }
         final WorkItem workItem = workItems.get(0);
         Date updateTime=new Date(workItem.getUpdateTime().getTime());

@@ -9,6 +9,16 @@ public class PayInDukpay {
 
     private int id;
 
+    private String endToEndId;
+
+    public String getEndToEndId() {
+        return endToEndId;
+    }
+
+    public void setEndToEndId(String endToEndId) {
+        this.endToEndId = endToEndId;
+    }
+
     private String idempotencyKey;
 
     private String merchantName;

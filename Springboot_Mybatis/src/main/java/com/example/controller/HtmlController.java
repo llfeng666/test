@@ -7,12 +7,10 @@ import com.example.entity.vo.BsRequestForm;
 import com.example.enums.PayOutTableNames;
 import com.example.service.Bs2QueryService;
 import com.example.service.Bs2Service;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 

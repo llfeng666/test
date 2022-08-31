@@ -9,6 +9,9 @@ import com.example.facade.bs2.Bs2RequestException;
 import com.example.facade.bs2.LiquidoCommonConfigs;
 import com.example.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.example.facade.bs2.model.Bs2Pix;
+import com.example.facade.bs2.model.Bs2PixPayInRefundRequest;
+import com.example.facade.bs2.model.Bs2PixPayInRefundResponse;
+import com.example.facade.bs2.model.Bs2QueryRefundResponse;
 import com.example.facade.bs2.model.Bs2RefreshTokenOauthResponse;
 import com.example.facade.bs2.model.Bs2TokenOauthResponse;
 import com.example.utils.LqWebClientBuilder;
@@ -150,24 +153,84 @@ public class Bs2RefreshTokenOauthClient {
     }
 
 
+  public Bs2QueryRefundResponse queryRefund(String originalPaymentE2eId, String accessToken) {
 
 
-    public Bs2RefreshTokenOauthResponse authRequest(final String refreshToken) {
+          final Map<String, String> authorization = Map.of(HttpHeaders.AUTHORIZATION, accessToken);
+          try {
+              final var httpReq =
+                      apiClient
+                              .get()
+                              .uri(uriBuilder ->
+                                      uriBuilder.path(Bs2CommonConfigs.QUERY_REFUND.replace("{eId}",originalPaymentE2eId))
+                                              .build())
+                              .headers(httpHeaders -> httpHeaders.setAll(authorization));
+              return httpUtils.retrieveResp(httpReq, Bs2QueryRefundResponse.class);
+          } catch (final Exception e) {
+              throw new Bs2RequestException(String.format(
+                      "Failed to request refund with original payment ID: %s, refund ID: %s, "
+                              + "and req: %s",
+                      originalPaymentE2eId,
+                      "",
+                      ""
+              ), e);
+          }
+
+      }
+
+
+      public Bs2RefreshTokenOauthResponse authRequest ( final String refreshToken){
+          try {
+              MultiValueMap<String, String> oauthParam = getOauthParam(refreshToken);
+              log.info("oauthParam -> {}", oauthParam);
+              final var req =
+                      oauthWebClient
+                              .post()
+                              .uri(Bs2CommonConfigs.OAUTH_URI)
+                              .bodyValue(oauthParam);
+              return httpUtils.retrieveResp(req, Bs2RefreshTokenOauthResponse.class);
+          } catch (final Exception e) {
+              throw new Bs2RequestException(
+                      String.format(
+                              "Failed to authRequest with param: %s", getOauthParam(refreshToken)),
+                      e
+              );
+          }
+      }
+
+
+
+    public Bs2PixPayInRefundResponse refund(String originalPaymentE2eId,String accessToken,Bs2PixPayInRefundRequest req) {
+
+        final var uriPathParams =
+                Map.of(
+                        Bs2CommonConfigs.E2E_ID_PARAM_NAME, originalPaymentE2eId,
+                        Bs2CommonConfigs.EXTERNAL_ID_PARAM_NAME,
+                        "TestRefundDynamicQRCodeExpiracao2592000"
+                );
+
+        final Map<String, String> authorization = Map.of(HttpHeaders.AUTHORIZATION, accessToken);
         try {
-            MultiValueMap<String, String> oauthParam = getOauthParam(refreshToken);
-            log.info("oauthParam -> {}",oauthParam);
-            final var req =
-                    oauthWebClient
-                            .post()
-                            .uri(Bs2CommonConfigs.OAUTH_URI)
-                            .bodyValue(oauthParam);
-            return httpUtils.retrieveResp(req, Bs2RefreshTokenOauthResponse.class);
+            final var httpReq =
+                    apiClient
+                            .put()
+                            .uri(uriBuilder ->
+                                    uriBuilder.path(Bs2CommonConfigs.PIX_PAY_IN_REFUND_URI)
+                                            .build(uriPathParams))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .headers(httpHeaders -> httpHeaders.setAll(authorization))
+                            .bodyValue(req);
+            return httpUtils.retrieveResp(httpReq, Bs2PixPayInRefundResponse.class);
         } catch (final Exception e) {
-            throw new Bs2RequestException(
-                    String.format(
-                            "Failed to authRequest with param: %s", getOauthParam(refreshToken)),
-                    e
-            );
+            throw new Bs2RequestException(String.format(
+                    "Failed to request refund with original payment ID: %s, refund ID: %s, "
+                            + "and req: %s",
+                    originalPaymentE2eId,
+                    "",
+                    req
+            ), e);
         }
+
     }
+
 }

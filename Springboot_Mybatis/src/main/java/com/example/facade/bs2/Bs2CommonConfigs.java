@@ -59,6 +59,11 @@ public class Bs2CommonConfigs {
                     "/pix/direto/forintegration/v1/pix/{%s}/devolucao/{%s}", E2E_ID_PARAM_NAME,
                     EXTERNAL_ID_PARAM_NAME
             );
+
+
+    public static final String QUERY_REFUND =   "/pix/direto/forintegration/v1/pix/{eId}";
+
+
     public static final String PIX_PAY_IN_QUERY_BILLING_BY_TX_ID_URI =
             String.format("/pix/direto/forintegration/v1/cob/{%s}", TX_ID_PARAM_NAME);
 

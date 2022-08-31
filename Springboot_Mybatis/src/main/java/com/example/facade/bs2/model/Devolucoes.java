@@ -11,7 +11,7 @@ public class Devolucoes {
 
    private String  id;
       private String rtrId;
-    private int  valor;
+    private String  valor;
     private Horario  horario;
     private String status;
     private String motivo;
