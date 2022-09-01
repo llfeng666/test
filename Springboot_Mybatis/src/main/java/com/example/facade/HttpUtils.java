@@ -178,6 +178,7 @@ public final class HttpUtils {
                         atomicBoolean.set(true);
                         return bodyStrMono;
                     } else if (clientResponse.statusCode().is4xxClientError()) {
+                        atomicBoolean.set(false);
                         return bodyStrMono.flatMap(errorBody -> Mono.error(
                                 new InternalServerException(String.format(
                                         "Response failed with 4xx: %s, and message is: %s",
@@ -185,6 +186,7 @@ public final class HttpUtils {
                                 )))
                         );
                     } else if (clientResponse.statusCode().is5xxServerError()) {
+                        atomicBoolean.set(false);
                         return bodyStrMono.flatMap(errorBody -> {
                             final var message = String.format(
                                     "Response failed with 5XX: %s, and message is: %s. "
@@ -198,6 +200,7 @@ public final class HttpUtils {
                             ));
                         });
                     } else {
+                        atomicBoolean.set(false);
                         return bodyStrMono.flatMap(errorBody -> {
                             log.error(
                                     "Response received unsupported HttpStatus code: {}, "

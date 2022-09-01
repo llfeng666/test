@@ -14,6 +14,7 @@ import com.example.facade.bs2.model.Bs2PixPayInRefundResponse;
 import com.example.facade.bs2.model.Bs2QueryRefundResponse;
 import com.example.facade.bs2.model.Bs2RefreshTokenOauthResponse;
 import com.example.facade.bs2.model.Bs2TokenOauthResponse;
+import com.example.facade.bs2.model.Pix;
 import com.example.utils.LqWebClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,13 +116,13 @@ public class Bs2RefreshTokenOauthClient {
         }
     }
 
-    public boolean webhookPix(Bs2Pix bs2Pix){
+    public boolean webhookPix(Pix pix){
         try {
             final var request = liquidoWebClient
                     .post()
                     .uri(LiquidoCommonConfigs.WEBHOOK)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(bs2Pix);
+                    .bodyValue(pix);
             return httpUtils.retrieveRespCode(request);
         } catch (Exception e) {
             log.info("Failed to search Bs2 by eid :%s" );

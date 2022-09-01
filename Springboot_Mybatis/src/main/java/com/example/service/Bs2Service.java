@@ -16,6 +16,7 @@ import com.example.facade.bs2.model.Bs2PixPayInRefundRequest;
 import com.example.facade.bs2.model.Bs2PixPayInRefundResponse;
 import com.example.facade.bs2.model.Bs2QueryRefundResponse;
 import com.example.facade.bs2.model.Devolucoes;
+import com.example.facade.bs2.model.Pix;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -143,12 +144,13 @@ public class Bs2Service {
         String data = eidStatusResponse.getData();
         double valor = eidStatusResponse.getValor();
         Bs2Pix bs2Pix =
-                Bs2Pix.builder().status("EFETIVADO").endToEndId(e2eId).txId(txId).value(valor)
-                        .settledTime(data)
+                Bs2Pix.builder().status("EFETIVADO").endToEndId(e2eId).txId(txId).valor(valor)
+                        .horario(data)
                         .payer(Bs2Pix.PixPayer.builder().cpf("").name("liquido").build()).build();
+        final Pix pix = Pix.builder().pix(List.of(bs2Pix)).build();
         log.info("开始回调自己请求入参;{}", new ObjectMapper().writeValueAsString(bs2Pix));
         //回调
-        boolean successFlag = bs2RefreshTokenOauthClient.webhookPix(bs2Pix);
+        boolean successFlag = bs2RefreshTokenOauthClient.webhookPix(pix);
         Thread.sleep(2000);
         final PayInDukpay payInDukpayInfo =
                 bs2QueryService.queryPayInDukpayById(payInDukpay.getIdempotencyKey(), tableName);
