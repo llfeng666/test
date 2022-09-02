@@ -14,12 +14,12 @@
     <link href="../../static/css/spring-core.css"
           th:href="@{css/spring-core.css}" rel="stylesheet" media="screen"/>
 </head>
-<body>
+<body th:align="center">
 <div class="container">
 
     <h2> 生 成 凭 据</h2>
     <div>
-        <form class="form-horizontal" th:object="${bsRequestForm}" th:action="@{/bs2/show}" method="post">
+        <form class="form-horizontal" th:object="${bsRequestForm}" th:action="@{/bs2/showProof}" method="post">
 
 
 
@@ -77,6 +77,16 @@
                 <button type="submit" class="btn btn-default">create</button>
             </div>
         </form>
+
+        <p>    </p>
+        <p>    </p>
+        <p>    </p>
+        <div th:if="${not #lists.isEmpty(bsResponse)}">
+            <div class="form-group" >
+                <label style="background-color: #bc3030" th:text="${bsResponse.errorMsg}" class="col-sm-2 control-label">:</label>
+            </div>
+
+
     </div>
 </div>
 

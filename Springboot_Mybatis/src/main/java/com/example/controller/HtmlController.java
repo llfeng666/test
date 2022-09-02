@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.converters.BsRequestFormToBsRequest;
 import com.example.entity.BsResponse;
 import com.example.entity.Proof;
@@ -7,6 +8,7 @@ import com.example.entity.vo.BsRequestForm;
 import com.example.enums.PayOutTableNames;
 import com.example.service.Bs2QueryService;
 import com.example.service.Bs2Service;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@Slf4j
 @Controller
 public class HtmlController {
 
@@ -31,23 +34,27 @@ public class HtmlController {
 
 
 
-    @RequestMapping({"/bs2/list", "/bs"})
-    public String listProducts(Model model){
-        model.addAttribute("bsRequestForm", new BsRequestForm());
+    @RequestMapping({"/bs2/createProof", "/bs"})
+    public String createProof(Model model,BsRequestForm bsRequestForm){
+        model.addAttribute("bsRequestForm", bsRequestForm);
         return "bs/createProof";
     }
 
 
 
     //生成凭证界面
-    @RequestMapping(value = "/bs2/show",method = RequestMethod.POST)
+    @RequestMapping(value = "/bs2/showProof",method = RequestMethod.POST)
     public String createProof( BsRequestForm bsRequestForm,Model model){
         //前端判断非空  合作方必输
         final String e2eId = bsRequestForm.getE2eId();
         final String idempotencyKey = bsRequestForm.getIdempotencykey();
         if (StringUtils.isEmpty(e2eId)&&StringUtils.isEmpty(idempotencyKey)) {
             //e2eId 和 idempotencyKey 必输
-
+            final BsResponse bsResponse =
+                    BsResponse.builder().errorMsg("e2eId 和 idempotencyKey 必输一个").build();
+            model.addAttribute("bsResponse", bsResponse);
+            model.addAttribute("bsRequestForm", bsRequestForm);
+            return "bs/createProof";
         }
 
         //查询db 将数据返回出去
@@ -55,7 +62,16 @@ public class HtmlController {
 
         final Proof ploofInfo = bs2QueryService.getPloofInfo(bsRequestForm.getIdempotencykey(),
                 bsRequestForm.getE2eId(), tableName);
-        //将组装等数据 反显到界面 todo
+        log.info("将组装等数据 反显到界面");
+        if (ObjectUtil.isNull(ploofInfo)) {
+            //将组装等数据 反显到界面
+            final BsResponse bsResponse =
+                    BsResponse.builder().errorMsg("根据幂等键或者e2eId没有查询到数据").build();
+            model.addAttribute("bsResponse", bsResponse);
+            model.addAttribute("bsRequestForm", bsRequestForm);
+            return "bs/createProof";
+        }
+
         model.addAttribute("ploofInfo", ploofInfo);
         return "bs/BS2 Empresas";
     }
