@@ -1,0 +1,40 @@
+@startuml
+title unipagos问题处理
+start
+:1.根据银行卡号查询sub_accounts_nanopay;
+if (判断\n sub_accounts_nanopay\n  有无记录) is (yes) then
+
+    :根据sub_account_uuid和amount \n 查询sub_account_payback_nanopay;
+    if (判断是否存在payback记录) then (yes)
+        if (判断payback记录是否为settled) is (no) then
+          :根据external_id和日期调unipagos服务
+          的tranfer接口查询;
+           :更新payback记录;
+           :通知商户;
+           :登记表格settled;
+            stop
+        endif
+      else (no)
+     :调unipago服务balance接口;
+     if (判断amount和接口返回的balance是否一致) is (yes) then
+       :调unipago服务payback接口;
+     else (no)
+       :登记表格待确认;
+       stop
+     endif
+      if (判断状态是否为settled) is (no) then
+        :登记表格待确认;
+        stop
+      endif
+
+    endif
+
+else (no)
+  :登记表格待确认;
+  stop
+endif
+:登记表格settled;
+
+stop
+
+@enduml

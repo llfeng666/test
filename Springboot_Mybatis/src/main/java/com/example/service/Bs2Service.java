@@ -48,7 +48,7 @@ public class Bs2Service {
         }
 
 
-        if (Objects.isNull(PayInTableNames.findTableName(request.getCoName()))) {
+        if (StrUtil.isEmpty(PayInTableNames.findTableName(request.getCoName()))) {
             log.error("暂不支持传入对商户名称");
             return BsResponse.builder().eId(request.getE2eId()).errorMsg("暂不支持传入对商户名称")
                     .build();
@@ -100,7 +100,7 @@ public class Bs2Service {
                               String tableName) throws Exception {
 
         PayInDukpay payInDukpay;
-        if (!Objects.isNull(vendorTransactionId)) {
+        if (!StrUtil.isEmpty(vendorTransactionId)) {
             payInDukpay =
                     bs2QueryService.queryPayInDukpayByVendorId(vendorTransactionId, tableName);
         } else {

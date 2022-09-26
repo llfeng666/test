@@ -15,4 +15,8 @@ public class DBConstants {
      */
     public static final String DATASOURCE_LIQUIDO_TRANSFER = "liquido_transfer";
 
+    /**
+     * 数据源分组 - liquido
+     */
+    public static final String DATASOURCE_LIQUIDO = "aquarius";
 }

@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9094
 
 spring:
   datasource:
@@ -19,6 +19,12 @@ spring:
           driver-class-name: com.mysql.jdbc.Driver
           username: master
           password: liquido-prod-master
+        # liquido 数据源配置
+        aquarius:
+          url: jdbc:mysql://127.0.0.1:13308/liquido
+          driver-class-name: com.mysql.jdbc.Driver
+          username: ue_liq_kisg3_rw
+          password: BqKHJe4bIAKK
 
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
@@ -34,8 +40,8 @@ logging:
 bs2:
   baseUrl: https://api.bs2.com
   oauth:
-    apiKey: l71ac854e55e4246c3802785bd2a35be89
-    secret: 3e0db6bf6271406186d3e10eab4ace13
+    apiKey: l7fb5c994eb92c4bc6aa48c95ca8e6cc53
+    secret: 34b392590ef149bf87f48f7e6f9d1d71
     grantType: client_credentials
     scope: saldo extrato pagamento transferencia boleto cob.write cob.read pix.write pix.read dict.write dict.read webhook.read webhook.write cobv.write cobv.read comprovante
 liquido:
