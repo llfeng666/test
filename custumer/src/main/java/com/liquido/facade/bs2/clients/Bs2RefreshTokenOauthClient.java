@@ -120,6 +120,7 @@ public class Bs2RefreshTokenOauthClient {
             final var request = liquidoWebClient
                     .post()
                     .uri(LiquidoCommonConfigs.WEBHOOK)
+                    .headers((httpHeaders -> httpHeaders.setAll(getApiHeaders())))
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(pix);
             return httpUtils.retrieveRespCode(request);
@@ -233,4 +234,11 @@ public class Bs2RefreshTokenOauthClient {
 
     }
 
+
+    private Map<String, String> getApiHeaders() {
+        return Map.of(
+                "x-api-key",
+                "fztXT5QuK755svjly94H6anwAYD1Ap3249jH2djb"
+        );
+    }
 }

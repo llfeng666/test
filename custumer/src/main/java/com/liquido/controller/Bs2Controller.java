@@ -2,6 +2,8 @@ package com.liquido.controller;
 
 import java.util.Objects;
 
+import javax.validation.Valid;
+
 import com.liquido.entity.BsRequest;
 import com.liquido.entity.BsResponse;
 import com.liquido.entity.PayInDukpay;
@@ -41,7 +43,7 @@ public class Bs2Controller {
      * @return
      */
     @PostMapping("/fixProblemByEidAndId")
-    public BsResponse fixProblemByEidAndId(@RequestBody BsRequest request)
+    public BsResponse fixProblemByEidAndId(@Valid @RequestBody BsRequest request)
             throws Exception {
 
         return bs2Service.fixProblemByEidAndId(request);
