@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquido.mapper.PayOutDukpayMapper">
+
+
+    <select id="queryPayOutInfo" parameterType="com.liquido.entity.CoQueryRequest"
+            resultType="com.liquido.entity.Proof">
+        SELECT CONCAT("R$ ", a.amount) as orderAmount,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(a.response, 'name=', -1), ',', 1) as pensonName,
+        CONCAT('***.', SUBSTR(SUBSTRING_INDEX(SUBSTRING_INDEX(a.response, 'documentId=', -1), ',', 1), 4, 3),
+        '.', SUBSTR(SUBSTRING_INDEX(SUBSTRING_INDEX(a.response, 'documentId=', -1), ',', 1), 7, 3),
+        '-**') as cpf,
+        FROM_UNIXTIME(a.final_status_unix_time - 3 * 60 * 60, '%d/%m/%Y') as settleDate,
+        a.pix_end_to_end_id as eId
+        FROM ${tableName} a
+        WHERE
+        a.`status` = 'SETTLED'
+        AND a.payment_type = 'Pix'
+        <if test="eId != null and eId != ''">
+            and a.pix_end_to_end_id = #{eId}
+        </if>
+        <if test="idempotencyKey != null and idempotencyKey != ''">
+            and   a.idempotency_key = #{idempotencyKey}
+        </if>
+    </select>
+
+
+</mapper>
