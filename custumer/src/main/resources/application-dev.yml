@@ -1,7 +1,14 @@
 server:
-  port: 9094
+  port: 9092
 
 spring:
+  mail:
+    host: smtp.126.com
+    username: llfeng666@126.com
+    password: IVKJBRZIMSSKDIJM
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    default-encoding: utf-8
   datasource:
     # dynamic-datasource-spring-boot-starter 动态数据源的配置内容
     dynamic:
@@ -46,6 +53,7 @@ bs2:
     scope: saldo extrato pagamento transferencia boleto cob.write cob.read pix.write pix.read dict.write dict.read webhook.read webhook.write cobv.write cobv.read comprovante
 liquido:
   baseUrl: https://api.liquido.com
+
 
 
 redis:

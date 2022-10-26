@@ -1,6 +1,7 @@
 package com.liquido.facade.bs2.model;
 
 import com.liquido.enums.models.PaymentStatus;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Bs2BoletoStatus {

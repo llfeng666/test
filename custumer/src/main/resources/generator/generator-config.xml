@@ -29,15 +29,15 @@
         </jdbcConnection>
 
         <!-- domain类的位置 -->
-        <javaModelGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/Springboot_Mybatis/src/main/java"
+        <javaModelGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/custumer/src/main/java"
                             targetPackage="com.liquido.entity"/>
 
         <!-- mapper xml的位置 -->
-        <sqlMapGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/Springboot_Mybatis/src/main/resources"
+        <sqlMapGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/custumer/src/main/resources"
                          targetPackage="mapping"/>
 
         <!-- mapper类的位置 -->
-        <javaClientGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/Springboot_Mybatis/src/main/java"
+        <javaClientGenerator targetProject="/Users/llfeng/workspace/springBoot_Mybatis/custumer/src/main/java"
                              targetPackage="com.liquido.mapper"
                              type="XMLMAPPER"/>
 
@@ -54,7 +54,7 @@
         <!--<table tableName="order_pay_refund" domainObjectName="OrderPayRefund"/>-->
         <!--<table tableName="bill_batch" domainObjectName="BillBatch"/>-->
         <!--<table tableName="bill_alipay" domainObjectName="BillAlipay"/>-->
-        <table tableName="sub_account_payback_didicredit" domainObjectName="SubAccountPaybackDidicredit"/>
+        <table tableName="sub_account_payback_nanopay" domainObjectName="subAccountsNanopayArcus"/>
         <!--<table tableName="bill_handle" domainObjectName="BillHandle"/>-->
     </context>
 </generatorConfiguration>

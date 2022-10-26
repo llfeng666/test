@@ -72,7 +72,13 @@ public class LogAspect {
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
-        LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter));
+
+        try {
+            LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter));
+        } catch (Exception e) {
+
+        }
+
     }
 
     @Around("controllerPointcut()")

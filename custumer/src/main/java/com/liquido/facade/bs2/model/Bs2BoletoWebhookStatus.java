@@ -3,6 +3,7 @@ package com.liquido.facade.bs2.model;
 
 import com.liquido.enums.models.PaymentStatus;
 import com.liquido.exceptions.InternalServerException;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Bs2BoletoWebhookStatus {
