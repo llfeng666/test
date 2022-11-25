@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquido.mapper.SubAccountPaybackNanopayMapper">
+  <resultMap id="BaseResultMap" type="com.liquido.entity.SubAccountPaybackNanopay">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="parent_account_uuid" jdbcType="VARCHAR" property="parentAccountUuid" />
+    <result column="parent_account_id" jdbcType="VARCHAR" property="parentAccountId" />
+    <result column="sub_account_id" jdbcType="VARCHAR" property="subAccountId" />
+    <result column="sub_account_uuid" jdbcType="VARCHAR" property="subAccountUuid" />
+    <result column="friendly_name" jdbcType="VARCHAR" property="friendlyName" />
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+    <result column="external_bank_account" jdbcType="VARCHAR" property="externalBankAccount" />
+    <result column="request_id" jdbcType="VARCHAR" property="requestId" />
+    <result column="external_id" jdbcType="VARCHAR" property="externalId" />
+    <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
+    <result column="reference_number" jdbcType="VARCHAR" property="referenceNumber" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="amount" jdbcType="VARCHAR" property="amount" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="submit_unix_time" jdbcType="BIGINT" property="submitUnixTime" />
+    <result column="submit_time" jdbcType="VARCHAR" property="submitTime" />
+    <result column="final_status_time" jdbcType="VARCHAR" property="finalStatusTime" />
+    <result column="final_status_unix_time" jdbcType="BIGINT" property="finalStatusUnixTime" />
+    <result column="vendor_error_code" jdbcType="VARCHAR" property="vendorErrorCode" />
+    <result column="vendor_error_message" jdbcType="VARCHAR" property="vendorErrorMessage" />
+    <result column="response" jdbcType="VARCHAR" property="response" />
+    <result column="notify_client_status" jdbcType="VARCHAR" property="notifyClientStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="flags" jdbcType="INTEGER" property="flags" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, parent_account_uuid, parent_account_id, sub_account_id, sub_account_uuid, 
+    friendly_name, legal_name, external_bank_account, request_id, external_id, transaction_id, 
+    reference_number, `status`, amount, currency, description, submit_unix_time, submit_time, 
+    final_status_time, final_status_unix_time, vendor_error_code, vendor_error_message, 
+    response, notify_client_status, create_time, update_time, version, flags
+  </sql>
+  <select id="selectByExample" parameterType="com.liquido.entity.SubAccountPaybackNanopayExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sub_account_payback_nanopay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sub_account_payback_nanopay
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sub_account_payback_nanopay
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.liquido.entity.SubAccountPaybackNanopayExample">
+    delete from sub_account_payback_nanopay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.liquido.entity.SubAccountPaybackNanopay">
+    insert into sub_account_payback_nanopay (id, user_id, parent_account_uuid, 
+      parent_account_id, sub_account_id, sub_account_uuid, 
+      friendly_name, legal_name, external_bank_account, 
+      request_id, external_id, transaction_id, 
+      reference_number, `status`, amount, 
+      currency, description, submit_unix_time, 
+      submit_time, final_status_time, final_status_unix_time, 
+      vendor_error_code, vendor_error_message, response, 
+      notify_client_status, create_time, update_time, 
+      version, flags)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{parentAccountUuid,jdbcType=VARCHAR}, 
+      #{parentAccountId,jdbcType=VARCHAR}, #{subAccountId,jdbcType=VARCHAR}, #{subAccountUuid,jdbcType=VARCHAR}, 
+      #{friendlyName,jdbcType=VARCHAR}, #{legalName,jdbcType=VARCHAR}, #{externalBankAccount,jdbcType=VARCHAR}, 
+      #{requestId,jdbcType=VARCHAR}, #{externalId,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, 
+      #{referenceNumber,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{submitUnixTime,jdbcType=BIGINT}, 
+      #{submitTime,jdbcType=VARCHAR}, #{finalStatusTime,jdbcType=VARCHAR}, #{finalStatusUnixTime,jdbcType=BIGINT}, 
+      #{vendorErrorCode,jdbcType=VARCHAR}, #{vendorErrorMessage,jdbcType=VARCHAR}, #{response,jdbcType=VARCHAR}, 
+      #{notifyClientStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER}, #{flags,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.liquido.entity.SubAccountPaybackNanopay">
+    insert into sub_account_payback_nanopay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="parentAccountUuid != null">
+        parent_account_uuid,
+      </if>
+      <if test="parentAccountId != null">
+        parent_account_id,
+      </if>
+      <if test="subAccountId != null">
+        sub_account_id,
+      </if>
+      <if test="subAccountUuid != null">
+        sub_account_uuid,
+      </if>
+      <if test="friendlyName != null">
+        friendly_name,
+      </if>
+      <if test="legalName != null">
+        legal_name,
+      </if>
+      <if test="externalBankAccount != null">
+        external_bank_account,
+      </if>
+      <if test="requestId != null">
+        request_id,
+      </if>
+      <if test="externalId != null">
+        external_id,
+      </if>
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="referenceNumber != null">
+        reference_number,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="submitUnixTime != null">
+        submit_unix_time,
+      </if>
+      <if test="submitTime != null">
+        submit_time,
+      </if>
+      <if test="finalStatusTime != null">
+        final_status_time,
+      </if>
+      <if test="finalStatusUnixTime != null">
+        final_status_unix_time,
+      </if>
+      <if test="vendorErrorCode != null">
+        vendor_error_code,
+      </if>
+      <if test="vendorErrorMessage != null">
+        vendor_error_message,
+      </if>
+      <if test="response != null">
+        response,
+      </if>
+      <if test="notifyClientStatus != null">
+        notify_client_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="flags != null">
+        flags,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccountUuid != null">
+        #{parentAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccountId != null">
+        #{parentAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="subAccountId != null">
+        #{subAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="subAccountUuid != null">
+        #{subAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="friendlyName != null">
+        #{friendlyName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalName != null">
+        #{legalName,jdbcType=VARCHAR},
+      </if>
+      <if test="externalBankAccount != null">
+        #{externalBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="requestId != null">
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="externalId != null">
+        #{externalId,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceNumber != null">
+        #{referenceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUnixTime != null">
+        #{submitUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="submitTime != null">
+        #{submitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finalStatusTime != null">
+        #{finalStatusTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finalStatusUnixTime != null">
+        #{finalStatusUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="vendorErrorCode != null">
+        #{vendorErrorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorErrorMessage != null">
+        #{vendorErrorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="response != null">
+        #{response,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyClientStatus != null">
+        #{notifyClientStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="flags != null">
+        #{flags,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.liquido.entity.SubAccountPaybackNanopayExample" resultType="java.lang.Long">
+    select count(*) from sub_account_payback_nanopay
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sub_account_payback_nanopay
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentAccountUuid != null">
+        parent_account_uuid = #{record.parentAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentAccountId != null">
+        parent_account_id = #{record.parentAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subAccountId != null">
+        sub_account_id = #{record.subAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subAccountUuid != null">
+        sub_account_uuid = #{record.subAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.friendlyName != null">
+        friendly_name = #{record.friendlyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.legalName != null">
+        legal_name = #{record.legalName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.externalBankAccount != null">
+        external_bank_account = #{record.externalBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestId != null">
+        request_id = #{record.requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.externalId != null">
+        external_id = #{record.externalId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transactionId != null">
+        transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.referenceNumber != null">
+        reference_number = #{record.referenceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitUnixTime != null">
+        submit_unix_time = #{record.submitUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.submitTime != null">
+        submit_time = #{record.submitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.finalStatusTime != null">
+        final_status_time = #{record.finalStatusTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.finalStatusUnixTime != null">
+        final_status_unix_time = #{record.finalStatusUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.vendorErrorCode != null">
+        vendor_error_code = #{record.vendorErrorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorErrorMessage != null">
+        vendor_error_message = #{record.vendorErrorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.response != null">
+        response = #{record.response,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notifyClientStatus != null">
+        notify_client_status = #{record.notifyClientStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.flags != null">
+        flags = #{record.flags,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sub_account_payback_nanopay
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      parent_account_uuid = #{record.parentAccountUuid,jdbcType=VARCHAR},
+      parent_account_id = #{record.parentAccountId,jdbcType=VARCHAR},
+      sub_account_id = #{record.subAccountId,jdbcType=VARCHAR},
+      sub_account_uuid = #{record.subAccountUuid,jdbcType=VARCHAR},
+      friendly_name = #{record.friendlyName,jdbcType=VARCHAR},
+      legal_name = #{record.legalName,jdbcType=VARCHAR},
+      external_bank_account = #{record.externalBankAccount,jdbcType=VARCHAR},
+      request_id = #{record.requestId,jdbcType=VARCHAR},
+      external_id = #{record.externalId,jdbcType=VARCHAR},
+      transaction_id = #{record.transactionId,jdbcType=VARCHAR},
+      reference_number = #{record.referenceNumber,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=VARCHAR},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      submit_unix_time = #{record.submitUnixTime,jdbcType=BIGINT},
+      submit_time = #{record.submitTime,jdbcType=VARCHAR},
+      final_status_time = #{record.finalStatusTime,jdbcType=VARCHAR},
+      final_status_unix_time = #{record.finalStatusUnixTime,jdbcType=BIGINT},
+      vendor_error_code = #{record.vendorErrorCode,jdbcType=VARCHAR},
+      vendor_error_message = #{record.vendorErrorMessage,jdbcType=VARCHAR},
+      response = #{record.response,jdbcType=VARCHAR},
+      notify_client_status = #{record.notifyClientStatus,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      version = #{record.version,jdbcType=INTEGER},
+      flags = #{record.flags,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.liquido.entity.SubAccountPaybackNanopay">
+    update sub_account_payback_nanopay
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccountUuid != null">
+        parent_account_uuid = #{parentAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccountId != null">
+        parent_account_id = #{parentAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="subAccountId != null">
+        sub_account_id = #{subAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="subAccountUuid != null">
+        sub_account_uuid = #{subAccountUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="friendlyName != null">
+        friendly_name = #{friendlyName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalName != null">
+        legal_name = #{legalName,jdbcType=VARCHAR},
+      </if>
+      <if test="externalBankAccount != null">
+        external_bank_account = #{externalBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="requestId != null">
+        request_id = #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="externalId != null">
+        external_id = #{externalId,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null">
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceNumber != null">
+        reference_number = #{referenceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUnixTime != null">
+        submit_unix_time = #{submitUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="submitTime != null">
+        submit_time = #{submitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finalStatusTime != null">
+        final_status_time = #{finalStatusTime,jdbcType=VARCHAR},
+      </if>
+      <if test="finalStatusUnixTime != null">
+        final_status_unix_time = #{finalStatusUnixTime,jdbcType=BIGINT},
+      </if>
+      <if test="vendorErrorCode != null">
+        vendor_error_code = #{vendorErrorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorErrorMessage != null">
+        vendor_error_message = #{vendorErrorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="response != null">
+        response = #{response,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyClientStatus != null">
+        notify_client_status = #{notifyClientStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="flags != null">
+        flags = #{flags,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.liquido.entity.SubAccountPaybackNanopay">
+    update sub_account_payback_nanopay
+    set user_id = #{userId,jdbcType=VARCHAR},
+      parent_account_uuid = #{parentAccountUuid,jdbcType=VARCHAR},
+      parent_account_id = #{parentAccountId,jdbcType=VARCHAR},
+      sub_account_id = #{subAccountId,jdbcType=VARCHAR},
+      sub_account_uuid = #{subAccountUuid,jdbcType=VARCHAR},
+      friendly_name = #{friendlyName,jdbcType=VARCHAR},
+      legal_name = #{legalName,jdbcType=VARCHAR},
+      external_bank_account = #{externalBankAccount,jdbcType=VARCHAR},
+      request_id = #{requestId,jdbcType=VARCHAR},
+      external_id = #{externalId,jdbcType=VARCHAR},
+      transaction_id = #{transactionId,jdbcType=VARCHAR},
+      reference_number = #{referenceNumber,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      submit_unix_time = #{submitUnixTime,jdbcType=BIGINT},
+      submit_time = #{submitTime,jdbcType=VARCHAR},
+      final_status_time = #{finalStatusTime,jdbcType=VARCHAR},
+      final_status_unix_time = #{finalStatusUnixTime,jdbcType=BIGINT},
+      vendor_error_code = #{vendorErrorCode,jdbcType=VARCHAR},
+      vendor_error_message = #{vendorErrorMessage,jdbcType=VARCHAR},
+      response = #{response,jdbcType=VARCHAR},
+      notify_client_status = #{notifyClientStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER},
+      flags = #{flags,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
