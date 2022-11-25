@@ -1,0 +1,385 @@
+server:
+  port: 9095
+
+spring:
+  mail:
+    host: smtp.126.com
+    username: llfeng666@126.com
+    password: IVKJBRZIMSSKDIJM
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    default-encoding: utf-8
+  datasource:
+    # dynamic-datasource-spring-boot-starter 动态数据源的配置内容
+    dynamic:
+      primary: virgo # 设置默认的数据源或者数据源组，默认值即为 virgo
+      datasource:
+        # virgo  数据源配置
+        virgo:
+          url: jdbc:mysql://localhost:13306/virgo
+          driver-class-name: com.mysql.jdbc.Driver
+          username: master
+          password: K2L7uSe2sAe2j5JS
+        # gemini 数据源配置
+        liquido_transfer:
+          url: jdbc:mysql://127.0.0.1:13304/liquido_transfer
+          driver-class-name: com.mysql.jdbc.Driver
+          username: master
+          password: liquido-prod-master
+        # liquido 数据源配置
+        aquarius:
+          url: jdbc:mysql://127.0.0.1:13308/liquido
+          driver-class-name: com.mysql.jdbc.Driver
+          username: ue_liq_kisg3_rw
+          password: BqKHJe4bIAKK
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.example.entity
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
+
+bs2:
+  baseUrl: https://api.bs2.com
+  oauth:
+    apiKey: l7fb5c994eb92c4bc6aa48c95ca8e6cc53
+    secret: 34b392590ef149bf87f48f7e6f9d1d71
+    grantType: client_credentials
+    scope: saldo extrato pagamento transferencia boleto cob.write cob.read pix.write pix.read dict.write dict.read webhook.read webhook.write cobv.write cobv.read comprovante
+liquido:
+  baseUrl: https://api.liquido.com
+
+
+
+redis:
+  address: redis://127.0.0.1:6379
+  namespace: virgo
+
+nanopay:
+  authUrl: https://authsg.liquido.com
+  baseUrl: https://api.liquido.com
+  clientId: nacmfnuvo8psvja6n2jp71dc4
+  clientSecret: 3ogkv8l7gjtput869n5uh8r016hgq4vl1e5qa0rdq0qmg25q8bl
+  apiKey: fOmn0rNl4U1Fp8kPwFUf83VDrxHQUYkY1Sigb5qM
+
+
+unipagos:
+  baseUrl: https://pay.unipagos.com
+  merchantConfigMap:
+    liquido:
+      apiKeyName: prod_liquido
+      apiKey: NIQ1perokZ2zbh84xo8NO24r9WDTLSTE3yj0ZWRs
+      keyStoreType: JKS
+      merchantId: 607742e38196a27f34ee6b71
+      merchantCode: "LQD0001"
+      clabe: 646180211500600002
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: liquido
+      speiDescription: Liquido
+      clientTimeZoneId: America/Los_Angeles
+      maxAmountCents: 9999900
+      minAmountCents: 1
+      arcusInstrumentId: TI_339cb150a5b6
+      arcusAccountId: ACC_7bf9c6c9fa94
+      arcusAccountNumber: 706180444340872312
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "1enhjg9ffetrk7grm66gi82ebtukpnbjg8fovec0kjc8dlhjnnkb"
+    didi:
+      apiKeyName: prod_didicredit
+      apiKey: vmhbh1G3uY4wSdHmLLeZ63GxS0jgHRPT1xuym8Sj
+      keyStoreType: JKS
+      merchantId: 60774599fc9d3e005b0ee9d3
+      merchantCode: "LQD0002"
+      clabe: 646180211500800006
+      keyStorePassword: DiDiCredit0427
+      keyStoreFileName: didicredit-liquido-unipagos-prod.jks
+      tableName: didicredit
+      speiDescription: DiDi Préstamos-Liquido
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 9999900
+      minAmountCents: 1
+      arcusInstrumentId: TI_fe4e1649fd06
+      arcusAccountId: ACC_ce73d795f184
+      arcusAccountNumber: 706180067157147730
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://manhattan-api.didiglobal.com/manhattan/global-loan/gateway/payCenter/liquido/callback/repayNotify
+      clientWebhookSecret: "1i9cgui75kpbkk9ftpfmhl1rc0lr24jo4tk1t1qdgka1297sifqm"
+    liquido_cn:
+      apiKeyName: prod_liquido_cn
+      apiKey: m83oqLLfDdFRimgF9ots7Wan28gBIE66VONNKu7i
+      keyStoreType: JKS
+      merchantId: 60774599fc9d3e005b0ee9d3
+      merchantCode: "LQD0003"
+      clabe: 646180211500800006
+      keyStorePassword: DiDiCredit0427
+      keyStoreFileName: didicredit-liquido-unipagos-prod.jks
+      tableName: liquido_cn
+      speiDescription: DiDi Préstamos-Liquido
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 29999900
+      minAmountCents: 1
+      arcusInstrumentId: TI_a92cc2045c26
+      arcusAccountId: ACC_ef9492539a95
+      arcusAccountNumber: 706180762719703189
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "4h3kqf5nrd5ko8gb3v4kpcnn6oinq0avu54sv2dv4j17ojvsmrk"
+    kwai:
+      apiKeyName: prod_kwai
+      apiKey: tP7dYVvbF03i7mdR14WPG7v9ZzDdnZPU5Fwdr7CD
+      keyStoreType: JKS
+      merchantId: 60774784c5a67d7b5a448fc2
+      merchantCode: "LQD0004"
+      clabe: 646180211500700009
+      keyStorePassword: Kwai@Prod0424
+      keyStoreFileName: kwai-liquido-unipagos-prod.jks
+      tableName: kwai
+      speiDescription: Kwai Liquido
+      clientTimeZoneId: Asia/Shanghai
+      maxAmountCents: 9999900
+      minAmountCents: 1
+      arcusInstrumentId: TI_5569ba217e5d
+      arcusAccountId: ACC_ba4743280fac
+      arcusAccountNumber: 706180044567332653
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "9rjoejlo35bhg2i8j45pvbu6hsimu9ocu38cj9k6p4dp54t4udn"
+    nanopay:
+      apiKeyName: prod_nanopay
+      apiKey: fOmn0rNl4U1Fp8kPwFUf83VDrxHQUYkY1Sigb5qM
+      keyStoreType: JKS
+      merchantCode: "LQD0005"
+      merchantId: 6272f26ebc52210dd355fde2
+      clabe: 646180211501300000
+      keyStorePassword: Nanopay@0314
+      keyStoreFileName: prod-nanopay-keystore.jks
+      tableName: nanopay
+      speiDescription: Nanopay Liquido
+      clientTimeZoneId: Asia/Shanghai
+      maxAmountCents: 1000000000
+      minAmountCents: 1
+      arcusInstrumentId:
+      arcusAccountId:
+      arcusAccountNumber:
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://liquido.nanopay.mx/notify/v1/liquido
+      clientWebhookSecret: "3ogkv8l7gjtput869n5uh8r016hgq4vl1e5qa0rdq0qmg25q8bl"
+    calii:
+      apiKeyName: prod_calii
+      apiKey: yZpvUYrkg6BzvOvMg2wu1kZyrmuKrF69PTnhwCs1
+      merchantCode: "LQD0006"
+      keyStoreType: JKS
+      keyStorePassword: Cali@prod0609
+      keyStoreFileName: cali-prod-keystore.jks
+      tableName: calii
+      speiDescription: Liquido Calii
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 9999900
+      minAmountCents: 1
+      arcusInstrumentId: TI_dcf92d1018c9
+      arcusAccountId: ACC_c2c5a2f8bd11
+      arcusAccountNumber: 706180162425041308
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://calii.com/liquido_webhooks/cash_in
+      clientWebhookSecret: "q1p75aft8qmv470q910c6pthm6avj9672aftbhfpfi8gufdkqfc"
+    nanopay_arcus:
+      apiKeyName: prod_nanopay_arcus
+      apiKey: yl8Qjas5Y33UyfsAAvnUB7JTDNyJBi1zZvsOGB38
+      keyStoreType: JKS
+      merchantCode: "LQD0007"
+      merchantId: 6272f26ebc52210dd355fde2
+      clabe: 646180211501300000
+      keyStorePassword: Nanopay@0314
+      keyStoreFileName: prod-nanopay-keystore.jks
+      tableName: nanopay_arcus
+      speiDescription: Nanopay Arcus Liquido
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 1000000000
+      minAmountCents: 1
+      arcusInstrumentId: TI_3f1d2ab41337
+      arcusAccountId: ACC_898232386884
+      arcusAccountNumber: 706180166064174645
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://liquido.nanopay.mx/notify/v1/liquidoArcus
+      clientWebhookSecret: "1pugab688gth0u9d1vmn08iu0h092lv47amr0bd8t19pg04204ui"
+    sailone:
+      apiKeyName: prod_sailone
+      apiKey: Ufvyi63Uw85bW6dS3bwQO9SDKmf4rBTt8UoX3MjH
+      keyStoreType: JKS
+      merchantId: 633633ceafef630bd978b2e9
+      merchantCode: "LQD008"
+      clabe: 646180211500600002
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: sailone
+      speiDescription: Liquido Sailone
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 3000000
+      minAmountCents: 1
+      arcusInstrumentId: TI_1263b2a84547
+      arcusAccountId: ACC_45285457ad70
+      arcusAccountNumber: 706180053100050655
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://payment.yumicash.com/callback/v1/liquido/repay
+      clientWebhookSecret: "ls90i0nn957l3ev6j03k1sncc0ltqusji95akdouk80kt4rq6u3"
+    zubale:
+      apiKeyName: prod_zubale
+      apiKey: 5Mcd2kZ9YbaWpLquOMtQs3arnHoVOi9b1JAqKPRh
+      keyStoreType: JKS
+      merchantId: 607742e38196a27f34ee6b71
+      merchantCode: "LQD0009"
+      clabe: 646180211500600002
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: zubale
+      speiDescription: Liquido Zubale
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 1000000
+      minAmountCents: 1
+      arcusInstrumentId: TI_b9c0646fe0ef
+      arcusAccountId: ACC_b70691190f84
+      arcusAccountNumber: 706180550806861515
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "18m46hdc9sosp442pbp8j4ptmleiv5q88sf0araotgjiclt6u1a9"
+    payermax:
+      apiKeyName: prod_payermax
+      apiKey: 1O08LP1vJpPUwWNsJzJf5SNMgW45bjz23BXUpz9g
+      merchantCode: "LQD0010"
+      keyStoreType: JKS
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: payermax
+      speiDescription: Liquido Payermax
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 3000000
+      minAmountCents: 1
+      arcusInstrumentId: TI_d93efa66f75c
+      arcusAccountId: ACC_c4bbabd5c9fe
+      arcusAccountNumber: 706180310577109021
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "1ogsrl1ipq35r3llne1v1ragin18q4jl0uufojfs96va3mu4ktpa"
+    payermax_mx:
+      apiKeyName: prod_payermax_mx
+      apiKey: Wsp0JBgm2b6MALKTfC3Pp6n3dlSwGJIe14ZV4Zjx
+      merchantCode: "LQD0011"
+      keyStoreType: JKS
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: payermax_mx
+      speiDescription: Liquido Payermax_mx
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 500000
+      minAmountCents: 1
+      arcusInstrumentId: TI_11c45537dbcd
+      arcusAccountId: ACC_0cddeb4a7ec6
+      arcusAccountNumber: 706180362982531180
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "1luq594mbe4gfafs78idbqp48t6rk0bbhv7qhd6qq7ubq5teok9h"
+    payermax_xtransfer:
+      apiKeyName: prod_payermax_xtransfer
+      apiKey: ROILgMBSqmo3gLMzVRrElpZo6zqRCh4I0Tz9Vqf0
+      merchantCode: "LQD0012"
+      keyStoreType: JKS
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: payermax_xtransfer
+      speiDescription: Liquido Payermax_xtransfer
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 500000
+      minAmountCents: 1
+      arcusInstrumentId: TI_cdba945cedd5
+      arcusAccountId: ACC_f972df6fae6c
+      arcusAccountNumber: 706180275009586341
+      payoutNotifyUrl:
+      paybackNotifyUrl:
+      clientWebhookSecret: "1314ac4ftbdcd3tp2ap3tcmdheslfpm5sv0kssfr75mggc15rmvr"
+    sailone_stp:
+      apiKeyName: prod_sailone_stp
+      apiKey: ysOEkR9ENT69yIngN9jL56vZC7LNJNzw3cpsF1Ks
+      keyStoreType: JKS
+      merchantId: 633633ceafef630bd978b2e9
+      merchantCode: "LQD0014"
+      clabe: 646180211501600001
+      keyStorePassword: Sailone@0930
+      keyStoreFileName: prod-sailone-keystore.jks
+      tableName: sailone_stp
+      speiDescription: Liquido Sailone STP
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 3000000
+      minAmountCents: 1
+      arcusInstrumentId:
+      arcusAccountId:
+      arcusAccountNumber:
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://payment.yumicash.com/callback/v1/liquido/repay
+      clientWebhookSecret: "oqoeu5s6gh4mc2ied47r6i9e2po3jqgs0bn9i5palmqam3onteh"
+    fintopia:
+      apiKeyName: prod_fintopia
+      apiKey: hmHXUnYYzr7o9GsRbTlfx7EClmT5dZU14X2AEEP9
+      merchantCode: "LQD0015"
+      merchantId: 63363635afef630bd978b2ef
+      keyStoreType: JKS
+      clabe: 646180211501400007
+      keyStorePassword: Fintopia@0930
+      keyStoreFileName: prod-fintopia-keystore.jks
+      tableName: fintopia
+      speiDescription: Liquido Fintopia
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 500000
+      minAmountCents: 1
+      arcusInstrumentId: TI_216b3871c6bc
+      arcusAccountId: ACC_b5ac74b4c5ac
+      arcusAccountNumber: 706180136940776728
+      payoutNotifyUrl: https://cm-api.fintopia.tech/api/payment/liquido/arcus/callback/payout
+      paybackNotifyUrl: https://cm-api.fintopia.tech/api/payment/liquido/arcus/callback/repay
+      clientWebhookSecret: "1jsji2u452cqv71pkhl2299bs8lckh0knuk5jl5f9pc37k1ecu45"
+    dukpay:
+      apiKeyName: prod_dukpay
+      apiKey: BEQrdA9fAu3tZeEuOpVeE18lsH0hzlZX3NfiLPgO
+      merchantCode: "LQD0016"
+      merchantId: 607742e38196a27f34ee6b71
+      keyStoreType: JKS
+      clabe: 646180211500600002
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: dukpay
+      speiDescription: Liquido Dukpay
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 500000
+      minAmountCents: 1
+      arcusInstrumentId: TI_6be96308029a
+      arcusAccountId: ACC_5d85aabd7087
+      arcusAccountNumber: 706180256478465944
+      payoutNotifyUrl:
+      paybackNotifyUrl: https://prod-payment.dukpay.com/callback/liquido_sub_account
+      clientWebhookSecret: "1avarjov5uvnmns3n5itvknbl62phenbngqviufdjsjkcr2sh6ti"
+    capella:
+      apiKeyName: prod_capella
+      apiKey: JoKD3Othyh84JVxfWepQp5kLEBAsCUFe6HpGl8Oj
+      merchantCode: "LQD0017"
+      merchantId: 607742e38196a27f34ee6b71
+      keyStoreType: JKS
+      clabe: 646180211500600002
+      keyStorePassword: Liquido
+      keyStoreFileName: liquido-prod-keystore.jks
+      tableName: capella
+      speiDescription: Liquido Capella
+      clientTimeZoneId: GMT+00:00
+      maxAmountCents: 500000
+      minAmountCents: 1
+      arcusInstrumentId: TI_e9901cafd9f9
+      arcusAccountId: ACC_4371f00db839
+      arcusAccountNumber: 706180172772740902
+      payoutNotifyUrl: https://payment.librecredito.com/callback/v1/liquido/payment/spei
+      paybackNotifyUrl: https://payment.librecredito.com/callback/v1/liquido/repayment/va
+      clientWebhookSecret: "1vse66mgmuikbh8kuu9f0ti5tnc6r3u5pl4gndl0f1fop5kq2gu8"

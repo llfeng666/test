@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquido.mapper.PayInDukpayMapper">
+
+    <resultMap id="BaseResultMap" type="com.liquido.entity.PayInDukpay">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="idempotency_key" jdbcType="VARCHAR" property="idempotencyKey"/>
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"/>
+        <result column="reference_id" jdbcType="VARCHAR" property="referenceId"/>
+    </resultMap>
+
+    <select id="selectByIdKey" parameterType="com.liquido.entity.CoQueryRequest"
+            resultType="com.liquido.entity.PayInDukpay">
+        select id                      as id,
+               idempotency_key         as idempotencyKey,
+               merchant_name           as merchantNam,
+               vendor_transaction_id   as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
+               transfer_status         as transferStatus,
+               JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') as endToEndId
+        from ${tableName}
+        where idempotency_key = #{idempotencyKey}
+    </select>
+
+
+    <select id="selectByEId" parameterType="com.liquido.entity.CoQueryRequest"
+            resultType="com.liquido.entity.PayInDukpay">
+        select id                    as id,
+               idempotency_key       as idempotencyKey,
+               merchant_name         as merchantNam,
+               vendor_transaction_id as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
+               transfer_status       as transferStatus,
+               JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') as endToEndId
+        from ${tableName}
+        where JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') = #{eId}
+    </select>
+
+
+    <select id="selectByVendorId" parameterType="com.liquido.entity.CoQueryRequest"
+            resultType="com.liquido.entity.PayInDukpay">
+        select id                    as id,
+               idempotency_key       as idempotencyKey,
+               merchant_name         as merchantNam,
+               vendor_transaction_id as vendorTransactionId,
+               internal_transaction_id as internalTransactionId,
+               transfer_status       as transferStatus,
+               JSON_VALUE(payment_info, '$.pixPaymentInfo.pixEndToEndId') as endToEndId
+        from ${tableName}
+        where vendor_transaction_id = #{vendorId}
+    </select>
+
+</mapper>

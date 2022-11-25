@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquido.mapper.WorkItemMapper">
+
+
+    <select id="queryByGroupId"
+            resultType="com.liquido.entity.WorkItem">
+        select work_item_id        as workItemId,
+               work_type           as workType,
+               work_group_id       as workGroupId,
+               num_retries         as numRetries,
+               status              as status,
+               last_failure_reason as lastFailureReason,
+               last_run_time       as lastRunTime,
+               version             as version,
+               create_time         as createTime,
+               update_time         as updateTime
+        from work_item
+        where work_group_id = #{groupId}
+        and status='SUCCEEDED'
+        order by update_time desc
+    </select>
+
+
+</mapper>
