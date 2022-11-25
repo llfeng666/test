@@ -54,7 +54,7 @@
         <!--<table tableName="order_pay_refund" domainObjectName="OrderPayRefund"/>-->
         <!--<table tableName="bill_batch" domainObjectName="BillBatch"/>-->
         <!--<table tableName="bill_alipay" domainObjectName="BillAlipay"/>-->
-        <table tableName="sub_account_payback_nanopay" domainObjectName="subAccountsNanopayArcus"/>
+        <table tableName="sub_account_payback_nanopay_arcus" domainObjectName="SubAccountPaybackNanopayArcus"/>
         <!--<table tableName="bill_handle" domainObjectName="BillHandle"/>-->
     </context>
 </generatorConfiguration>

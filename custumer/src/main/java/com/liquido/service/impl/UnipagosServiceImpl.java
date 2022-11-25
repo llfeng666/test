@@ -1,5 +1,6 @@
 package com.liquido.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.liquido.entity.NanoPayRequest;
@@ -7,10 +8,14 @@ import com.liquido.entity.SubAccountPaybackNanopay;
 import com.liquido.entity.SubAccountPaybackNanopayExample;
 import com.liquido.entity.SubAccountsNanopay;
 import com.liquido.entity.SubAccountsNanopayExample;
-import com.liquido.entity.unipagos.model.UnipagosAccountBalanceResponse;
+import com.liquido.entity.payback.CashInCallbackDto;
+import com.liquido.entity.payback.LiquidoOauthResponse;
+import com.liquido.entity.payback.SubAcctDto;
+import com.liquido.entity.payback.SubAcctPaybackDto;
 import com.liquido.entity.vo.BasicResultVO;
 import com.liquido.enums.Vendor;
-import com.liquido.exceptions.InternalServerException;
+import com.liquido.enums.models.UnipagosPaymentStatus;
+import com.liquido.facade.liquido.LiquidoClient;
 import com.liquido.mapper.SubAccountPaybackNanopayMapper;
 import com.liquido.mapper.SubAccountsNanopayMapper;
 import com.liquido.service.VendorService;
@@ -28,20 +33,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UnipagosServiceImpl  implements VendorService {
 
-//    @Autowired
-//    private LqDateUtils lqDateUtils;
-
     @Autowired
     private SubAccountsNanopayMapper subAccountsNanopayMapper;
 
     @Autowired
     private SubAccountPaybackNanopayMapper subAccountPaybackNanopayMapper;
 
+    @Autowired
+    private LiquidoClient liquidoClient;
 
     private static final String SUCCESS = "SUCCESS";
-
-    private static final String ZERO = "0.00";
-
 
 
     @Override
@@ -59,6 +60,21 @@ public class UnipagosServiceImpl  implements VendorService {
 
         String subAccountUuid =
                 subAccountsNanopays.stream().findFirst().orElseThrow().getSubAccountUuid();
+
+        LiquidoOauthResponse liquidoOauthResponse = liquidoClient.authToken();
+        String accessToken = "Bearer "+liquidoOauthResponse.getAccessToken();
+        //查询 liquido 接口 balance
+        SubAcctDto subAcctDto = liquidoClient.balance(subAccountUuid ,accessToken);
+        final BigDecimal balance = new BigDecimal(subAcctDto.getBalance());
+        if (balance.compareTo(BigDecimal.ZERO)>0) {
+            //查询liquido接口 payback
+            SubAcctPaybackDto subAcctPaybackDto = liquidoClient.payback(accessToken
+                    ,subAccountUuid);
+        }else {
+            return new BasicResultVO().fail("payback 金额小于等于 记录为空 直接登记 表格 ");
+        }
+
+        //todo 是否要限制条件查询
         SubAccountPaybackNanopayExample subAccountPaybackNanopayExample =
                 new SubAccountPaybackNanopayExample();
         SubAccountPaybackNanopayExample.Criteria subCriteria =
@@ -68,66 +84,29 @@ public class UnipagosServiceImpl  implements VendorService {
         List<SubAccountPaybackNanopay> subAccountPaybackNanopays =
                 subAccountPaybackNanopayMapper.selectByExample(subAccountPaybackNanopayExample);
 
-        final String apiKey = "";
-        //查询 liquido 接口 payback
-        UnipagosAccountBalanceResponse unipagosAccountBalanceResponse =
-                null;
-
-        final String balance = String.valueOf(unipagosAccountBalanceResponse.getBalance());
-        if (balance.equals(ZERO)) {
-
-        }else if (nanoPayRequest.getAmount().equals(balance)){
-            //todo 查询liquido接口 payback
-
-        }else{
-
-        }
-
-
         if (CollectionUtil.isEmpty(subAccountPaybackNanopays)) {
-            //执行 5
-
-
-        }else{
-            //存在payback记录但状态不为settled查询vendor订单状态
-            SubAccountPaybackNanopay subAccountPaybackNanopay =
-                    subAccountPaybackNanopays.stream().findFirst()
-                            .orElseThrow(() -> new InternalServerException(""));
-            String payBackStatus = subAccountPaybackNanopay.getStatus();
-            if ("SETTLED".equals(payBackStatus)) {
-                return new BasicResultVO().success("已经是settled ");
-            }
-
-            final String submitTime = subAccountPaybackNanopay.getSubmitTime();
-//
-//            final String dateInPayCashFormat = lqDateUtils.getDateInPayCashFormat(
-//                    lqDateUtils.parseMexicoFormattedTime(submitTime), lqDateUtils.MEXICO_TIME);
-
-            // todo Unipagos 接口
-//            UnipagosTransferQueryResponse response =
-//                    unipagosClient.queryTransfer(dateInPayCashFormat,
-//                            subAccountPaybackNanopay.getExternalId(),
-//                            subAccountPaybackNanopay.getSubAccountId());
-//            if (SUCCESS.equals(response.getResultType())) {
-//                final UnipagosPaymentStatus status = UnipagosUtils.mapUnipagosStatus(
-//                        response.getStatus().orElse("RECEIVED"));
-//                UnipagosPaymentStatus txStatus = UnipagosPaymentStatus.INITIAL_STATUS;
-//                if (!status.isFinalStatus()
-//                        || status == UnipagosPaymentStatus.SETTLED) {
-//                    txStatus = UnipagosUtils.convertReceiptStatus(
-//                            response.getTxStatus().orElse("P"));
-//                }
-//                final Set<UnipagosPaymentStatus> isSettledStatus = Set.of(UnipagosPaymentStatus.SETTLED);
-//                if (isSettledStatus.contains(status) || isSettledStatus.contains(txStatus)) {
-//                //更新数据库
-//
-//                //通知商户
-//
-//                }
-//            }
-
+            return new BasicResultVO().fail("payback  记录为空 直接登记 表格 ");
         }
-        return null;
+        //todo 处理哪一笔payback 记录
+        SubAccountPaybackNanopay subAccountPaybackNanopay =
+                subAccountPaybackNanopays.stream().findFirst().get();
+        //判断payback状态
+        String status = subAccountPaybackNanopay.getStatus();
+        if (UnipagosPaymentStatus.SETTLED.name().equals(status)) {
+            return new BasicResultVO().success("已经settled ");
+        }
+
+        //todo 调unipagos 接口去查询
+
+
+        //todo 组装需要更新的参数
+        int count = subAccountPaybackNanopayMapper.updateByPrimaryKeySelective(subAccountPaybackNanopay);
+        log.info("更新的笔数:{}", count);
+        //查询unipagos
+        CashInCallbackDto cashInCallbackDto =
+                liquidoClient.notifyMerchant(accessToken, subAccountPaybackNanopay.getTransactionId());
+
+        return new BasicResultVO().success("交易处理成功 ");
     }
 
     @Override
