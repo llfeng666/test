@@ -148,7 +148,7 @@ public class UnipagosServiceImpl  implements VendorService {
             }
             final Set<PaymentStatus> isSettledStatus = Set.of(PaymentStatus.SETTLED);
             if (isSettledStatus.contains(status) || isSettledStatus.contains(txStatus)) {
-                //todo 组装需要更新的参数
+                //todo 手写sql
                 int count = subAccountPaybackNanopayMapper.updateByPrimaryKeySelective(subAccountPaybackNanopay);
                 log.info("更新的笔数:{}", count);
                 //查询unipagos

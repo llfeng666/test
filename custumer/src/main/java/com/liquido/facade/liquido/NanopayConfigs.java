@@ -20,7 +20,7 @@ public class NanopayConfigs {
 
     private Map<String, MerchantConfig> merchantConfigMap;
 
-    public static final String API_KEY = "api_key";
+    public static final String API_KEY = "x-api-key";
     public static final String CLIENT_ID = "client_id";
 
     public static final String CLIENT_SECRET = "client_secret";

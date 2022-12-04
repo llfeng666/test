@@ -23,7 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Component
 public class LiquidoClient {
-    private static final String OAUTH_REFRESH_TOKEN_PARAM_KEY = "refresh_token";
+    private static final String GRANT_TYPE = "grant_type";
 
     private final NanopayConfigs nanopayConfigs;
     
@@ -64,7 +64,7 @@ public class LiquidoClient {
                 Map.of(
                         NanopayConfigs.CLIENT_ID, List.of(nanopayConfigs.getClientId()),
                         NanopayConfigs.CLIENT_SECRET, List.of(nanopayConfigs.getClientSecret()),
-                        OAUTH_REFRESH_TOKEN_PARAM_KEY, List.of("client_credentials")
+                        GRANT_TYPE, List.of("client_credentials")
                 ));
     }
 
@@ -108,7 +108,7 @@ public class LiquidoClient {
     public SubAcctDto balance(final String accountUuid, final String token) {
         try {
             String url = NanopayConfigs.BALANCE.replace("{accountUuid}", accountUuid);
-            log.info("请求的url地址： ",url);
+            log.info("请求的url地址： {}",url);
             final var request = liquidoWebClient
                     .get()
                     .uri(uriBuilder ->
