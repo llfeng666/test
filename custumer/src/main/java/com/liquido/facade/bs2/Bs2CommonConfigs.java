@@ -21,6 +21,7 @@ import org.springframework.util.SocketUtils;
 @NonFinal
 @Getter
 public class Bs2CommonConfigs {
+
     // The param names are not used literally in URLs
     public static final String E2E_ID_PARAM_NAME = "e2eId";
     public static final String EXTERNAL_ID_PARAM_NAME = "externalId";

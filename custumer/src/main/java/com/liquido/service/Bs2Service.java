@@ -3,8 +3,6 @@ package com.liquido.service;
 import java.util.List;
 import java.util.Objects;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.liquido.entity.BsRequest;
 import com.liquido.entity.BsResponse;
 import com.liquido.entity.PayInDukpay;
@@ -17,6 +15,9 @@ import com.liquido.facade.bs2.model.Bs2PixPayInRefundResponse;
 import com.liquido.facade.bs2.model.Bs2QueryRefundResponse;
 import com.liquido.facade.bs2.model.Devolucoes;
 import com.liquido.facade.bs2.model.Pix;
+
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,19 +60,11 @@ public class Bs2Service {
         String e2eId = request.getE2eId();
         String idempotencyKey = request.getIdempotencyKey();
         boolean idEmptyFlag = StringUtils.isEmpty(idempotencyKey);
-        //2.先查询 bs2
-        String accessToken;
-        try {
-            accessToken = bs2QueryService.getAccessToken(e2eId);
-        } catch (Exception e) {
-            log.error("调bs2 获取token 异常");
-            return BsResponse.builder().eId(e2eId).errorMsg("调bs2 获取token异常").build();
-        }
 
         //调bs2接口 查证
         Bs2GetEidStatusResponse eidStatusResponse;
         try {
-            eidStatusResponse = bs2QueryService.queryBs2Result(e2eId, accessToken);
+            eidStatusResponse = bs2QueryService.queryBs2Result(e2eId);
         } catch (Exception e) {
             log.error("调bs2 查证异常");
             return BsResponse.builder().eId(e2eId).errorMsg("调bs2 查证失败").build();
@@ -211,7 +204,7 @@ public class Bs2Service {
         final String accessToken;
         //执行退款逻辑
         try {
-            accessToken = bs2QueryService.getAccessToken(payInDukpay.getEndToEndId());
+            accessToken = bs2QueryService.getAccessToken();
         } catch (Exception e) {
             log.error("获取token异常");
             return BsResponse.builder().errorMsg("获取token异常").build();
@@ -220,7 +213,7 @@ public class Bs2Service {
         final Bs2GetEidStatusResponse eidStatusResponse;
         try {
             eidStatusResponse =
-                    bs2QueryService.queryBs2Result(payInDukpay.getEndToEndId(), accessToken);
+                    bs2QueryService.queryBs2Result(payInDukpay.getEndToEndId());
         } catch (Exception e) {
             log.error("查证bs2异常");
             return BsResponse.builder().errorMsg("查证bs2异常").build();
@@ -241,7 +234,7 @@ public class Bs2Service {
 
 
     public BsResponse queryRefund(String e2eId) {
-        final String accessToken = bs2QueryService.getAccessToken(e2eId);
+        final String accessToken = bs2QueryService.getAccessToken();
         final String invalidStr =
                 "Bearer " + accessToken;
         final Bs2QueryRefundResponse bs2QueryRefundResponse =

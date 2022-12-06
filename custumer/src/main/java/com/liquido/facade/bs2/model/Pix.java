@@ -3,7 +3,9 @@ package com.liquido.facade.bs2.model;
 import java.util.List;
 
 import lombok.Builder;
+import lombok.Value;
 
+@Value
 @Builder
 public class Pix {
 

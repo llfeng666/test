@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BsRequest {
+public class Bs2VendorIdRequest {
 
     private String idempotencyKey;
 
@@ -18,6 +18,7 @@ public class BsRequest {
     @NotNull(message = "商户名称不能为空")
     private String coName;
 
+    @NotNull(message = "商户名称不能为空")
     private String vendorId;
 
 

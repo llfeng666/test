@@ -11,10 +11,12 @@ import com.liquido.facade.bs2.model.Bs2GetEidStatusResponse;
 import com.liquido.facade.bs2.model.Bs2PixPayInRefundRequest;
 import com.liquido.facade.bs2.model.Bs2PixPayInRefundResponse;
 import com.liquido.facade.bs2.model.Bs2QueryRefundResponse;
+import com.liquido.facade.bs2.model.Bs2QueryTransactionByVendorIdResponse;
 import com.liquido.facade.bs2.model.Bs2RefreshTokenOauthResponse;
 import com.liquido.facade.bs2.model.Bs2TokenOauthResponse;
 import com.liquido.facade.bs2.model.Pix;
 import com.liquido.utils.LqWebClientBuilder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -145,6 +147,23 @@ public class Bs2RefreshTokenOauthClient {
                     String.format("Failed to search Bs2 by eid :%s",eId ), e);
         }
     }
+
+
+    public Bs2QueryTransactionByVendorIdResponse queryBs2ByVendorId(String vendorId, String token){
+        try {
+            final var request = apiClient
+                    .get()
+                    .uri(uriBuilder ->
+                            uriBuilder.path(Bs2CommonConfigs.PIX_PAY_IN_QUERY_BILLING_BY_TX_ID_URI)
+                                    .build(Map.of(Bs2CommonConfigs.TX_ID_PARAM_NAME,vendorId)))
+                    .headers((httpHeaders -> httpHeaders.setAll(getDefaultHeaders(token))));
+            return httpUtils.retrieveResp(request, Bs2QueryTransactionByVendorIdResponse.class);
+        } catch (Exception e) {
+            throw new Bs2RequestException(
+                    String.format("Failed to search Bs2 by vendorId :%s",vendorId ), e);
+        }
+    }
+
 
     private Map<String, String> getDefaultHeaders(String token) {
         return Map.of(

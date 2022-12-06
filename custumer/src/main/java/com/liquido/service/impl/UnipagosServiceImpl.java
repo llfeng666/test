@@ -69,7 +69,7 @@ public class UnipagosServiceImpl  implements VendorService {
                 subAccountsNanopayMapper.selectByExample(subAccountsExample);
         if (CollectionUtil.isEmpty(subAccountsNanopays)) {
             log.info("sub_accounts_nanopay 记录为空 直接登记 表格");
-            return new BasicResultVO().fail("sub_accounts_nanopay 记录为空 直接登记 表格 ");
+            return BasicResultVO.fail("sub_accounts_nanopay 记录为空 直接登记 表格 ");
         }
 
         String subAccountUuid =
@@ -85,7 +85,7 @@ public class UnipagosServiceImpl  implements VendorService {
             SubAcctPaybackDto subAcctPaybackDto = liquidoClient.payback(accessToken
                     ,subAccountUuid);
         }else {
-            return new BasicResultVO().fail("payback 金额小于等于 记录为空 直接登记 表格 ");
+            return BasicResultVO.fail("payback 金额小于等于 记录为空 直接登记 表格 ");
         }
 
         //金额和uuid 作为限制条件
@@ -99,7 +99,7 @@ public class UnipagosServiceImpl  implements VendorService {
                 subAccountPaybackNanopayMapper.selectByExample(subAccountPaybackNanopayExample);
 
         if (CollectionUtil.isEmpty(subAccountPaybackNanopays)) {
-            return new BasicResultVO().fail("payback  记录为空 直接登记 表格 ");
+            return BasicResultVO.fail("payback  记录为空 直接登记 表格 ");
         }
 
 
@@ -117,7 +117,7 @@ public class UnipagosServiceImpl  implements VendorService {
         //判断payback状态
         String status = subAccountPaybackNanopay.getStatus();
         if (UnipagosPaymentStatus.SETTLED.name().equals(status)) {
-            return new BasicResultVO().success("已经settled ");
+            return BasicResultVO.success("已经settled ");
         }
 
         // 调unipagos 接口去查询
@@ -134,7 +134,7 @@ public class UnipagosServiceImpl  implements VendorService {
             log.info("response:{}", response);
         } catch (Exception e) {
             log.error("unipagos query transfer error ");
-            return new BasicResultVO().success("unipagos query transfer error ");
+            return BasicResultVO.success("unipagos query transfer error ");
         }
 
         if (SUCCESS.equals(response.getResultType())) {
@@ -154,12 +154,12 @@ public class UnipagosServiceImpl  implements VendorService {
                 //查询unipagos
                 CashInCallbackDto cashInCallbackDto =
                         liquidoClient.notifyMerchant(accessToken, subAccountPaybackNanopay.getTransactionId());
-                return new BasicResultVO().success("交易处理成功 ");
+                return BasicResultVO.success("交易处理成功 ");
             }else{
-                return new BasicResultVO().fail("查询交易 状态返回失败");
+                return BasicResultVO.fail("查询交易 状态返回失败");
             }
         }else{
-            return new BasicResultVO().fail("查询交易 状态码返回失败");
+            return BasicResultVO.fail("查询交易 状态码返回失败");
         }
     }
 
